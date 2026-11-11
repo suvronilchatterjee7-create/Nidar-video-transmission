@@ -132,6 +132,34 @@ It also fails if an "implemented" test ID points at a missing test.
 - `tests/test_index.json`
 - `tools/check.py`
 
+## Phase 3 status (branch `phase3/video-reference`)
+
+**Implemented and verified against Paper 1's tables** (see [REPRODUCTION_P1.md](REPRODUCTION_P1.md)):
+
+| Area | Files |
+|---|---|
+| Certificates | `video/certificates/{info_density, sizing, dt_bound, kl_certificate, outage, grid}.py` |
+| Floor | `video/floor/designer.py` |
+| Decoder closed forms | `video/decoder.py`: Eq. 10, 18, 20 |
+| Refinement | `video/refinement/{allocator, limiter}.py` |
+| Pilots and quality | `video/pilots.py`, `video/quality.py` |
+| Control | `video/control/{snr_predictor, controller}.py` |
+| Channel simulator | `sim/channel/{block_fading, snr_process}.py` |
+| Synthetic experiment | `sim/video/synthetic_model.py` (new) |
+| Grid builder | `tools/build_certified_grid.py` |
+
+**Tests:** `tests/paper1/`, with VT-01..VT-19, CT-12 and CT-14 implemented.
+- Slow Monte-Carlo cases run with `tools/check.py --full`.
+- 30 of the 92 test IDs are now implemented.
+
+**Still stubs:**
+- `video/{transform, variance_field, encoder}.py`
+- `video/floor/{quantiser, entropy, crc}.py`
+- `video/refinement/spreader.py`
+- `HybridDecoder.decode`
+
+These wait for the video-format and radio decisions (OQ-12, OQ-03/10, OQ-23).
+
 ## What is *not* in the repo
 - ADIAT source: patterns only, clean-room [USER-PROMPT §4].
 - The dataset images or weights: they are referenced by path or URL to your NIDAR repo [DATASET]. They are not vendored, because of size (98 MB) and licence (OQ-08a).

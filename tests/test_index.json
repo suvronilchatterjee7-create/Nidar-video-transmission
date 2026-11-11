@@ -42,16 +42,16 @@
    "phase": "Phase 3 (video reference)"
   },
   "CT-12": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_channel_and_controller.py::test_ct12_controller_output_always_in_grid"
   },
   "CT-13": {
    "status": "planned",
    "phase": "Phase 3 (video reference)"
   },
   "CT-14": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_channel_and_controller.py::test_ct14_block_gain_statistics"
   },
   "CT-15": {
    "status": "planned",
@@ -290,80 +290,80 @@
    "phase": "mission / onboard phases"
   },
   "VT-01": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt01_firewall_price_table5"
   },
   "VT-02": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt02_kalman_steady_state"
   },
   "VT-03": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt03_posterior_variance"
   },
   "VT-04": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt04_allocation_kkt_and_no_improving_transfer"
   },
   "VT-05": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt05_information_density_moments"
   },
   "VT-06": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt06_table7"
   },
   "VT-07": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt07_table8_dt_estimates"
   },
   "VT-08": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt08_table9_ideal"
   },
   "VT-09": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt09_table10"
   },
   "VT-10": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt10_segmentation_penalty"
   },
   "VT-11": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt11_ideal_rateless"
   },
   "VT-12": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt12_table15"
   },
   "VT-13": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt13_table16_analytic_columns"
   },
   "VT-14": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt14_regret_within_bound"
   },
   "VT-15": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt15_table18"
   },
   "VT-16": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt16_estimation_error_allocation"
   },
   "VT-17": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt17_table19"
   },
   "VT-18": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt18_damped_settles_in_two_steps"
   },
   "VT-19": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/paper1/test_vt_reproduction.py::test_vt19_violation_interval"
   },
   "VT-20": {
    "status": "planned",

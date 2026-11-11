@@ -8,6 +8,7 @@ Status: **Phase 1 draft**.
 
 **Evidence levels** ([ARCHITECTURE.md §0.2](ARCHITECTURE.md#02-evidence-levels)):
 - PROVED (conditional on the stated assumptions)
+- REPRODUCED (our implementation matches the source's published number; see docs/REPRODUCTION_P1.md)
 - SIMULATED (source's own numbers, not yet reproduced by us)
 - TARGET (source says unvalidated)
 - REQUIRED (Brief rule, awaiting test)
@@ -71,21 +72,21 @@ Status: **Phase 1 draft**.
 
 | ID | Requirement | Source | Module(s) | Test(s) | Evidence |
 |---|---|---|---|---|---|
-| R-P1-01 | Chance-constrained floor P[T_eq < T_min] ≤ ε_F per GoP | [P1 Problem 2 (F), Thm 2] | `video/floor/*`, `video/certificates/*` | VT-06, VT-07, VT-08; channel-sim outage count | PROVED (A1–A6) / SIMULATED |
-| R-P1-02 | Ceiling tracking up to 10 Mbps-eq | [P1 Problem 2 (R)] | `video/refinement/*`, `video/control/controller` | VT-13, VT-18 | SIMULATED (η ≈ 0.66, one clip) |
+| R-P1-01 | Chance-constrained floor P[T_eq < T_min] ≤ ε_F per GoP | [P1 Problem 2 (F), Thm 2] | `video/floor/*`, `video/certificates/*` | VT-06, VT-07, VT-08; channel-sim outage count | PROVED (A1–A6); certificate numbers REPRODUCED (Tables 7–10, ≤1.2 %; L≤2 ideal cells −0.4/−0.9 %) |
+| R-P1-02 | Ceiling tracking up to 10 Mbps-eq | [P1 Problem 2 (R)] | `video/refinement/*`, `video/control/controller` | VT-13, VT-18 | SIMULATED (η ≈ 0.66, one clip); synthetic sweep NOT REPRODUCED in level (structure only) |
 | R-P1-03 | Orthonormal spatio-temporal transform, no encoder motion search | [P1 Def. 4, Lemma 2] | `video/transform` | CT-10 orthonormality, distortion invariance | PROVED |
 | R-P1-04 | Variance field and protected metadata | [P1 A3, A5, §D.3, Lemma 9] | `video/variance_field` | CT-11 quantisation round-trip; size vs 36,360-bit pilot figure | SIMULATED |
-| R-P1-05 | Firewalled floor, sized by water level and Eq. 16–17 | [P1 Def. 7, Prop. 6–7] | `video/floor/designer` | VT-01 | PROVED |
-| R-P1-06 | Certified finite-blocklength floor block | [P1 Thm 1, Prop. 11–12, Rem. 7–8] | `video/certificates/*`, `tools/build_certified_grid` | VT-05, VT-06, VT-07 | PROVED (i.i.d., Rayleigh, perfect CSI) |
-| R-P1-07 | Refinement allocation with side information, estimation error, limiter | [P1 Prop. 8, Prop. 16, Lemma 6, Rem. 6] | `video/refinement/*` | VT-03, VT-04, VT-12, VT-16, VT-14 | PROVED / SIMULATED |
-| R-P1-08 | Timely SNR feedback and margin rule | [P1 A7, Lemma 8, Thm 3, Table 19] | `video/control/snr_predictor`, `link/framing` `SnrReport` | VT-17; channel-sim with delay d | PROVED (A7–A8; A8 unproved in general) |
-| R-P1-09 | Controller restricted to a certified grid | [P1 Eq. 32, Eq. 40, Prop. 17–18, Thm 4] | `video/control/controller`, `video/certificates/grid` | VT-13, VT-18; CT-12: output ∈ grid always | PROVED |
-| R-P1-10 | Decoder: Kalman side info, conditional mean, floor fallback | [P1 Lemma 3, Prop. 3, Prop. 9, Rem. 5] | `video/decoder` | VT-02, VT-03; CT-13 fallback on mismatch | PROVED (Gaussian model) |
+| R-P1-05 | Firewalled floor, sized by water level and Eq. 16–17 | [P1 Def. 7, Prop. 6–7] | `video/floor/designer` | VT-01 | PROVED; Table 5 REPRODUCED exactly |
+| R-P1-06 | Certified finite-blocklength floor block | [P1 Thm 1, Prop. 11–12, Rem. 7–8] | `video/certificates/*`, `tools/build_certified_grid` | VT-05, VT-06, VT-07 | PROVED (i.i.d., Rayleigh, perfect CSI); Tables 7–8 REPRODUCED |
+| R-P1-07 | Refinement allocation with side information, estimation error, limiter | [P1 Prop. 8, Prop. 16, Lemma 6, Rem. 6] | `video/refinement/*` | VT-03, VT-04, VT-12, VT-16, VT-14 | PROVED; Table 15 REPRODUCED exactly; Table 17 bound verified (instances unstated) |
+| R-P1-08 | Timely SNR feedback and margin rule | [P1 A7, Lemma 8, Thm 3, Table 19] | `video/control/snr_predictor`, `link/framing` `SnrReport` | VT-17; channel-sim with delay d | PROVED (A7–A8; A8 unproved in general); Table 19 REPRODUCED; A8 point check REPRODUCED |
+| R-P1-09 | Controller restricted to a certified grid | [P1 Eq. 32, Eq. 40, Prop. 17–18, Thm 4] | `video/control/controller`, `video/certificates/grid` | VT-13, VT-18; CT-12: output ∈ grid always | PROVED; grid membership tested; controller dynamics REPRODUCED, fixed point 9.0 vs 9.41 dB NOT |
+| R-P1-10 | Decoder: Kalman side info, conditional mean, floor fallback | [P1 Lemma 3, Prop. 3, Prop. 9, Rem. 5] | `video/decoder` | VT-02, VT-03; CT-13 fallback on mismatch | PROVED (Gaussian model); Eq. 10, 18, 20 REPRODUCED; orchestration OPEN (OQ-12) |
 | R-P1-11 | Diversity L ≥ 4 exposed as a gate | [P1 Cor. 6] | `gcs/preflight`, `CertifiedFloorDesign.L` | VT-08; GT-13 gate refuses L < design L | SIMULATED; OPEN for our link (OQ-03) |
 | R-P1-12 | Latency T_g + τ_proc ≤ L_max | [P1 (L)] | `video/encoder`, `video/decoder` | VT-20 latency budget (needs L_max) | OPEN (OQ-13) |
-| R-P1-13 | Pilots and channel estimation | [P1 §C.1 Eq. 35, Table 18] | `video/pilots` | VT-15 | SIMULATED |
-| R-P1-14 | Quality accounting (T_eq, β_up, violation counter) | [P1 Def. 6, Prop. 10, Cor. 7] | `video/quality` | VT-19; GT-11 | PROVED (definitions) |
-| R-P1-15 | Fading and delayed-feedback channel simulator | [P1 Table 13 ph. 1–2, A7, §6.4] | `sim/channel` | CT-14 statistics (block gains Exp(1), AR(1) moments) | — (tool) |
+| R-P1-13 | Pilots and channel estimation | [P1 §C.1 Eq. 35, Table 18] | `video/pilots` | VT-15 | REPRODUCED (Table 18: all pilot counts, rates ±0.003) |
+| R-P1-14 | Quality accounting (T_eq, β_up, violation counter) | [P1 Def. 6, Prop. 10, Cor. 7] | `video/quality` | VT-19; GT-11 | PROVED (definitions); Cor. 7 REPRODUCED |
+| R-P1-15 | Fading and delayed-feedback channel simulator | [P1 Table 13 ph. 1–2, A7, §6.4] | `sim/channel` | CT-14 statistics (block gains Exp(1), AR(1) moments) | — (tool, implemented Phase 3) |
 
 ## 4. Paper 2 requirements (swarm, mission)
 

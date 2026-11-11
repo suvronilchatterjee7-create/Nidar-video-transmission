@@ -83,7 +83,7 @@ def test_requirement_has_module_and_test(row: list[str]) -> None:
 
 
 def test_every_requirement_has_an_evidence_level() -> None:
-    levels = ("PROVED", "SIMULATED", "TARGET", "REQUIRED", "OPEN", "—")
+    levels = ("PROVED", "REPRODUCED", "SIMULATED", "TARGET", "REQUIRED", "OPEN", "—")
     for row in _rows():
         if row[0].startswith("R-M"):
             continue

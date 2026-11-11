@@ -34,6 +34,7 @@ Used in [TRACEABILITY.md](TRACEABILITY.md) and throughout:
 
 - **PROVED**: a theorem or proposition in a source, true *under its stated assumptions*. The assumptions are always listed next to the claim.
 - **SIMULATED**: a number the source reports from its own numerics or pilot. It is not yet reproduced by us.
+- **REPRODUCED**: a number the source reports that our own implementation reproduces (Phase 3; [REPRODUCTION_P1.md](REPRODUCTION_P1.md)). This shows our code matches the paper; it does **not** make the paper's model true for our link.
 - **TARGET**: a design target the source itself calls unvalidated (e.g. 0.3 m drop accuracy, 8–12 ms NMPC, ≤ 11 min).
 - **REQUIRED**: a hard rule from the Brief. It is evidenced only by a future test.
 - **OPEN**: blocked on an OQ item.

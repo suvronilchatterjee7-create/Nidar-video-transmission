@@ -1,60 +1,75 @@
-"""Floor water level theta_F, coded set F, floor payload B_F and the firewall price.
-[P1 Def. 5, Def. 7 Eq. 12-13, 16-17, Prop. 6 Eq. 15, §5.1 E3]
+"""Floor water level theta_F, reference / intra rates, firewall price, floor payload.
 
-Phase 2 stub: every callable raises ``NotYetImplemented``.
+D(theta) = k^-1 sum min{theta, lambda_i}; R_ref(D) = sum 1/2 log2+((omega_i + a_i^2 theta) / theta)
+[P1 Def. 5 Eq. 12]; R_intra = sum 1/2 log2+(lambda_i / theta) [Eq. 13]; firewall price
+pi_g = R_intra - R_ref [P1 Prop. 6 Eq. 15]; theta_F solves R_ref(D(theta)) = T_min T_g [P1 Def. 7, E3];
+B_F = R_intra(D_F) + |F| Delta_q + B_meta [P1 Eq. 16-17]. All rates in bits per GoP.
 """
-
 from __future__ import annotations
 
 import numpy as np
 
-from nidar.common.stub import stub
-
-WAITS_FOR = "Phase 3 approval (Paper 1 reference implementation)"
+HIGH_RES_DELTA_Q = 0.5 * np.log2(np.pi * np.e / 6.0)   # ~0.2546 bit [P1 §5.2]
 
 
-def water_level(lam: np.ndarray, omega: np.ndarray, a: np.ndarray, t_min_bps: float, t_g: float) -> float:
-    """Water level. [P1 E3, Def. 7]"""
-    raise stub(
-        "nidar/video/floor/designer.py:water_level",
-        "P1 E3, Def. 7",
-        WAITS_FOR,
-    )
+def _arr(x: np.ndarray | float) -> np.ndarray:
+    return np.asarray(x, dtype=float)
+
+
+def distortion_level(theta: float, lam: np.ndarray) -> float:
+    """D(theta) = k^-1 sum min{theta, lambda_i} [P1 §4.5]."""
+    return float(np.minimum(theta, _arr(lam)).mean())
+
+
+def water_level_for_distortion(d: float, lam: np.ndarray) -> float:
+    """theta(D): unique solution of sum min{theta, lambda_i} = k D, for 0 < D <= mean(lambda) [P1 §4.5]."""
+    lam = _arr(lam)
+    if not 0 < d <= lam.mean() * (1 + 1e-12):
+        raise ValueError(f"D={d} must be in (0, mean(lambda)={lam.mean()}]")
+    lo, hi = 0.0, float(lam.max())
+    for _ in range(200):
+        mid = 0.5 * (lo + hi)
+        lo, hi = (mid, hi) if distortion_level(mid, lam) < d else (lo, mid)
+    return hi
 
 
 def reference_rate_bits(theta: float, lam: np.ndarray, omega: np.ndarray, a: np.ndarray) -> float:
-    """Reference rate bits. [P1 Eq. 12]"""
-    raise stub(
-        "nidar/video/floor/designer.py:reference_rate_bits",
-        "P1 Eq. 12",
-        WAITS_FOR,
-    )
+    """R_ref at water level theta [P1 Eq. 12]. Terms with lambda_i <= theta vanish (Corollary 2)."""
+    lam, omega, a = _arr(lam), _arr(omega), _arr(a)
+    coded = lam > theta
+    return float(0.5 * np.log2((omega[coded] + a[coded] ** 2 * theta) / theta).sum())
 
 
 def intra_rate_bits(theta: float, lam: np.ndarray) -> float:
-    """Intra rate bits. [P1 Eq. 13]"""
-    raise stub(
-        "nidar/video/floor/designer.py:intra_rate_bits",
-        "P1 Eq. 13",
-        WAITS_FOR,
-    )
+    """R_intra at water level theta [P1 Eq. 13]."""
+    lam = _arr(lam)
+    return float(0.5 * np.log2(np.maximum(lam / theta, 1.0)).sum())
 
 
 def firewall_price_bits(theta: float, lam: np.ndarray, omega: np.ndarray, a: np.ndarray) -> float:
-    """Firewall price bits. [P1 Prop. 6 Eq. 15]"""
-    raise stub(
-        "nidar/video/floor/designer.py:firewall_price_bits",
-        "P1 Prop. 6 Eq. 15",
-        WAITS_FOR,
-    )
+    """pi_g = sum_{lambda_i > theta} 1/2 log2(lambda_i / (omega_i + a_i^2 theta)) [P1 Prop. 6 Eq. 15]."""
+    lam, omega, a = _arr(lam), _arr(omega), _arr(a)
+    coded = lam > theta
+    return float(0.5 * np.log2(lam[coded] / (omega[coded] + a[coded] ** 2 * theta)).sum())
 
 
-def floor_payload_bits(
-    theta: float, lam: np.ndarray, omega: np.ndarray, a: np.ndarray, delta_q: float, b_meta: int
-) -> float:
-    """Floor payload bits. [P1 Eq. 16-17]"""
-    raise stub(
-        "nidar/video/floor/designer.py:floor_payload_bits",
-        "P1 Eq. 16-17",
-        WAITS_FOR,
-    )
+def water_level(lam: np.ndarray, omega: np.ndarray, a: np.ndarray, t_min_bps: float, t_g: float) -> float:
+    """theta_F with R_ref(D(theta_F)) = T_min T_g, theta_F in (0, max lambda] [P1 Def. 7, E3].
+    R_ref is non-increasing in theta, so bisection in log(theta) is exact to float precision."""
+    target = t_min_bps * t_g
+    lam = _arr(lam)
+    hi = float(lam.max())
+    lo = hi * 1e-15
+    if reference_rate_bits(lo, lam, omega, a) < target:
+        raise ValueError("T_min T_g exceeds the rate available from this variance field")
+    for _ in range(300):
+        mid = float(np.sqrt(lo * hi))
+        lo, hi = (mid, hi) if reference_rate_bits(mid, lam, omega, a) > target else (lo, mid)
+    return float(np.sqrt(lo * hi))
+
+
+def floor_payload_bits(theta: float, lam: np.ndarray, omega: np.ndarray, a: np.ndarray, delta_q: float,
+                       b_meta: int) -> float:
+    """B_F = R_intra(D_F) + |F| Delta_q + B_meta [P1 Eq. 16]."""
+    lam = _arr(lam)
+    return intra_rate_bits(theta, lam) + int((lam > theta).sum()) * delta_q + b_meta

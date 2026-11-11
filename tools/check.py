@@ -1,6 +1,7 @@
-"""Run every quality gate locally: lint, then the full test suite (including traceability).
+"""Run every quality gate locally: lint, then the test suite (including traceability).
 
-Usage:  .venv\\Scripts\\python tools\\check.py
+Usage:  .venv\\Scripts\\python tools\\check.py          # fast gates
+        .venv\\Scripts\\python tools\\check.py --full   # also the slow Monte-Carlo reproductions
 
 [ADIAT-inspired: CLAUDE.md lint + test gates] [USER-PROMPT §8 Phase 2 "CI/lint/test config"]
 """
@@ -12,15 +13,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-GATES = [
-    ("lint (ruff)", [sys.executable, "-m", "ruff", "check", "nidar", "tests", "tools", "sim"]),
-    ("tests (pytest)", [sys.executable, "-m", "pytest"]),
-]
-
 
 def main() -> int:
+    full = "--full" in sys.argv[1:]
+    gates = [
+        ("lint (ruff)", [sys.executable, "-m", "ruff", "check", "nidar", "tests", "tools", "sim"]),
+        ("tests (pytest)", [sys.executable, "-m", "pytest"]),
+    ]
+    if full:
+        gates.append(("slow reproductions (pytest -m slow)", [sys.executable, "-m", "pytest", "-m", "slow"]))
     failed = []
-    for name, cmd in GATES:
+    for name, cmd in gates:
         print(f"== {name}: {' '.join(cmd[2:])}")
         if subprocess.run(cmd, cwd=ROOT).returncode != 0:
             failed.append(name)

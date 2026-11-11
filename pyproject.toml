@@ -30,9 +30,10 @@ include = ["nidar*"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
-addopts = "-q -p no:cacheprovider"
+addopts = "-q -p no:cacheprovider -m \"not slow\""
 markers = [
     "traceability: checks TRACEABILITY.md against the code base",
+    "slow: long Monte-Carlo reproductions (run with: pytest -m slow, or tools/check.py --full)",
 ]
 
 [tool.ruff]

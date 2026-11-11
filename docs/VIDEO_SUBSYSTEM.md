@@ -178,17 +178,27 @@ Each subsection below gives: purpose · equations · inputs and outputs · param
 
 ### 4.7 `refinement_allocator` [P1 §5.3, Prop. 8, Prop. 16, Rem. 6, Lemma 7]
 - **Residual:** r_i = c_{g,i} − ĉ_i^F for i ∈ F, and r_i = c_{g,i} otherwise [P1 E5].
-- **Posterior after the floor:** σ_i = (1/σ̃_i + [1/θ_F − 1/λ_i]⁺)^−1 [P1 Eq. 18].
-- **Ideal channel knowledge** [P1 Prop. 8 Eq. 19]: minimise Σ D_i, where D_i = (1/σ_i + x_i/ν_i)^−1, subject to a total power budget.
-  - The result is a closed-form, water-filling-like rule with one multiplier μ > 0.
-  - Each component's distortion is either left at its posterior σ_i (inactive) or lowered to a μ-dependent level (active).
-  - Its power is the positive part of a closed-form expression.
-  - μ is the unique root of Σ P_i(μ) = P.
+- **Notation** (the paper's; Phase 3 re-extraction keeps the Greek letters):
+  - μ_i: side-information variance (Eq. 9)
+  - κ_i: posterior after the floor
+  - ϑ_i = min{λ_i, θ_F}: transmitted variance
+  - ν_i: per-dimension noise
+  - x_i = g_i²: gain squared
+  - ξ: power multiplier
+  - ζ: price of one active dimension
+- **Posterior after the floor:** κ_i = (1/μ_i + [1/θ_F − 1/λ_i]⁺)⁻¹ ≤ ϑ_i [P1 Eq. 18].
+- **Ideal channel knowledge** [P1 Prop. 8 Eq. 19]: minimise Σ D_i, with D_i = (1/κ_i + x_i/ν_i)⁻¹, subject to Σ ϑ_i x_i ≤ P.
+  - Distortion: D_i = min{κ_i, √(ξ ν_i ϑ_i)}.
+  - Power: P_i = ϑ_i x_i = [√(ν_i ϑ_i / ξ) − ν_i ϑ_i / κ_i]⁺.
+  - Active exactly when κ_i² > ξ ν_i ϑ_i.
+  - ξ is the unique root of Σ P_i(ξ) = P.
   - With no side information and no floor, this reduces to SoftCast-type allocation [P1 Cor. 5].
-  - *Transcription note:* the PDF text extraction lost the Greek symbols in Eq. 19. The exact expression will be re-typed from the rendered PDF in Phase 3 and checked by VT-04. It is not reproduced here to avoid a wrong formula.
+  - Implemented in `nidar/video/refinement/allocator.py`; checked by VT-04.
 - **Channel-estimation error** (normalised error variance ε_i²): use [P1 Prop. 16 Eq. 36]. Effective precision is capped at 1/(ε_i²·σ_i), e.g. 16.1 dB at N_p = 4 pilots, 10 dB [P1 Eq. 37].
 - **Clipping:** noise per dimension becomes (ν + σ_d²)/α² [P1 §B.1, after Eq. 30].
-- **Active-set limit** |A| ≤ 2n_A: Lagrangian price per component (saving s(μ), Lemma 7 Eq. 31); duality gap ≤ the largest single saving [P1 Rem. 6].
+- **Active-set limit** |A| ≤ 2n_A: the Lagrangian saving per component is s(ξ) = (κ − √(ξνϑ))²/κ [P1 Lemma 7 Eq. 31]. Keep the components with the largest savings; the duality gap is at most the largest single saving [P1 Rem. 6].
+  - The paper calls ζ "the saving of the marginal component" without saying which side of the cut that is.
+  - The implementation uses the best *excluded* component. This is an interpretation, recorded here.
 - **Open-loop gains:** gains come from the model recursion and the expected channel quality; no receiver feedback enters the gains [P1 Rem. 6]. Robustness: regret ≤ (1 + ε)² under multiplicative mismatch [P1 Prop. 15 Eq. 34]. Observed regret is much smaller [P1 Table 17].
 - **Scene cut:** loss is bounded by the redundancy ratio ρ_max [P1 Cor. 8]. The floor guarantee is unaffected [P1 Cor. 9].
 
@@ -231,10 +241,11 @@ Each subsection below gives: purpose · equations · inputs and outputs · param
 | D1 | Estimate the channel from pilots, equalise, set per-dimension noise ν_i | [P1 §C.1] |
 | D2 | Decode the floor block; record the success flag (CRC) | [P1 Rem. 7] |
 | D3 | Side information z_g = a·MC(x̂_{g−1}): **decoder-side** motion compensation, guided by the decoded floor's low-resolution reconstruction (hash-based MC at the receiver). No motion vectors sent. The pilot used zero-motion; the paper's target is ≥ 1 dB gain | [P1 §5.1 D3, Table 13 ph. 3] |
-| D4 | Conditional mean: a precision-weighted combination of the prediction z_i, the floor reconstruction ĉ_i^F and the equalised analogue observation y_i. Precisions add: 1/D_i = 1/σ̃_i + [1/θ_F − 1/λ_i]⁺ + g_i²/ν_i. Exact Eq. 20 to be re-typed from the rendered PDF in Phase 3 (transcription note as above) | [P1 Prop. 9 Eq. 20] |
+| D4 | Conditional mean ĉ_i = D_i [z_i/μ_i + (1/θ_F + g_i²/ν_i) ĉ_i^F + (g_i/ν_i) y_i], with 1/D_i = 1/κ_i + g_i²/ν_i. The 1/θ_F term is absent for i ∉ F. Implemented and Monte-Carlo checked (VT-03) | [P1 Prop. 9 Eq. 20] |
 | D5 | Inverse transform; update D_i(g) (Kalman bank) | [P1 Lemma 3, Prop. 3] |
 
-- **Steady state** per coefficient: D(π) = (−B + sqrt(B² + 4π·a²·ω)) / (2π·a²), with B = 1 + π·ω − a² [P1 Prop. 3 Eq. 10]. Geometric convergence at rate ≤ a².
+- **Steady state** per coefficient, for added precision η: D∞(η) = (−B + √(B² + 4η a² ω)) / (2η a²), with B = 1 + ηω − a² [P1 Prop. 3 Eq. 10]. Geometric convergence at rate ≤ a².
+  - The code uses the algebraically equal form 2ω / (B + √(B² + 4η a² ω)). It avoids cancellation and covers a = 0.
 - **Fallback:** if the decoder detects that analogue or side-information quality is mismatched, it uses the floor reconstruction only, which keeps the guarantee [P1 Rem. 5]. The detector and threshold for "mismatched" are **not specified** in the paper. They are a named parameter in `video/decoder`, flagged OPEN.
 - **If the floor fails** (outage), the GoP is below T_min by definition. The decoder still outputs the best estimate from side information and the analogue layer, flagged `floor_ok = False`. The display behaviour is OQ-24.
 
@@ -329,6 +340,8 @@ How W is shared among drones is **not in any source** (OQ-11). The architecture 
 ---
 
 ## 11. Verification plan (Phase 3, only after approval) [USER-PROMPT §8 Phase 3]
+
+> **Phase 3 status:** VT-01 to VT-19 are implemented. Results, including what did **not** reproduce, are in [REPRODUCTION_P1.md](REPRODUCTION_P1.md). VT-20 waits for L_max (OQ-13).
 
 Each check re-implements the closed form from the PDF and compares with the **published** number. A mismatch is reported, never tuned away [USER-PROMPT §8].
 

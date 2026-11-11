@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Iterable
 
 PLATFORMS = frozenset({"onboard", "gcs", "sim"})
-EVIDENCE_LEVELS = frozenset({"PROVED", "SIMULATED", "TARGET", "REQUIRED", "OPEN", "INFRA"})
+EVIDENCE_LEVELS = frozenset({"PROVED", "REPRODUCED", "SIMULATED", "TARGET", "REQUIRED", "OPEN", "INFRA"})
 DEFAULT_PATH = Path(__file__).with_name("registry.json")
 SOURCE_TAG = re.compile(r"^(BRIEF|P1|P2|ADIAT-inspired|USER-PROMPT|DATASET)\b")
 

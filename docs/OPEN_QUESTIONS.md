@@ -205,7 +205,7 @@ Tag key: see [ARCHITECTURE.md §0](ARCHITECTURE.md#0-conventions).
 ### OQ-26 · Python toolchain — PROVISIONAL (used in Phase 2; change it if you prefer)
 - **Machine:** 3.15 (default), 3.14, 3.11.
 - **Phase 2 used the proposal:** a project `.venv` on Python 3.11.9 with numpy 1.26.4, pytest 8.3.3 and ruff 0.6.9 (lint), pinned in `pyproject.toml`.
-- **scipy is still not installed.** It will be requested at the start of Phase 3 ([USER-PROMPT §6.2]).
+- **scipy was not needed in Phase 3.** The standard library and numpy cover Q⁻¹, erfc and quadrature, so no new dependency was added.
 
 ### OQ-27 · Who runs the auction — OPEN (minor)
 - **Sources:** [P2 §5.3, §7.3] says it is centralised at the GCS. [P2 §2.4] says "for a decentralized swarm architecture, distributed consensus-based auction algorithms may alternatively be employed".
@@ -222,7 +222,10 @@ Tag key: see [ARCHITECTURE.md §0](ARCHITECTURE.md#0-conventions).
 - **Sources:** [P2 §6.4 Exc. 4] mentions a "companion computer" receiving the payload trigger. The flight controller (autopilot) is never specified. [P2 §8.2] puts NMPC at 50 Hz on the companion computer.
 - **Decision needed:** which failsafes ([BRIEF §8]) are enforced by the autopilot itself vs the companion computer, for independence when the companion computer fails.
 
-### OQ-30 · Table 9 transcription check — OPEN (Phase 3, minor)
+### OQ-30 · Table 9 transcription check — RESOLVED (Phase 3)
+- **Resolution:** the "Certified" column belongs to rows L = 4 / 8 / 16 / 64 (0.521 / 0.298 / 0.223 / 0.171), as Cor. 6 states. It is shifted one row down in the text extraction. Our certified search gives 0.515 / 0.296 / 0.221 / 0.170 (see REPRODUCTION_P1.md).
+
+*Original question:*
 - **Issue:** text extraction misaligns the "Certified" column of [P1 Table 9]. Phase 1 uses the unambiguous values in [P1 Cor. 6] (52 / 30 / 22 / 17 % for L = 4 / 8 / 16 / 64).
 - **Phase 3 action:** re-check against the rendered PDF.
 
