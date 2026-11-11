@@ -1,7 +1,7 @@
 """Onboard / GCS component protocols (docs/INTERFACES.md §9).
 
 Every real-time component sits behind one of these, so the Python reference and a compiled
-implementation are interchangeable and run the same contract tests. [USER-PROMPT §6.2]
+implementation are interchangeable and run the same contract tests. [TEAM-BRIEF §6.2]
 """
 from __future__ import annotations
 

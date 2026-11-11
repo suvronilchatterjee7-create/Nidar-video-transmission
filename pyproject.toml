@@ -1,5 +1,5 @@
 # NIDAR RescueSwarm — reference implementation and simulation package.
-# Toolchain: Python 3.11 venv (OQ-26, proposed in Phase 0/1). [USER-PROMPT §6.2]
+# Toolchain: Python 3.11 venv (OQ-26, proposed in Phase 0/1). [TEAM-BRIEF §6.2]
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
@@ -18,7 +18,7 @@ dev = [
     "pytest==8.3.3",
     "ruff==0.6.9",
 ]
-# Phase 3 will add scipy only after approval [USER-PROMPT §6.2 "do not install heavy dependencies without asking"].
+# Phase 3 will add scipy only after approval [TEAM-BRIEF §6.2 "do not install heavy dependencies without asking"].
 
 [tool.setuptools.packages.find]
 include = ["nidar*"]
@@ -43,7 +43,7 @@ extend-exclude = [".venv"]
 
 [tool.ruff.lint]
 # E/F/W: pycodestyle + pyflakes; I: import order; T20: no print() in runtime code
-# [ADIAT-inspired: CLAUDE.md §2.4 "no production print()"]; B: bugbear basics.
+# [ADIAT-inspired: ADIAT-standards §2.4 "no production print()"]; B: bugbear basics.
 select = ["E", "F", "W", "I", "T20", "B"]
 
 [tool.ruff.lint.per-file-ignores]

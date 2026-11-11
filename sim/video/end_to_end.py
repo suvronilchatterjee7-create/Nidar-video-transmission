@@ -5,7 +5,7 @@ complex noise nu_c = 10^(-SNR/10); N_p unit pilots per block; uses interleaved a
 Floor delivery by the ideal-outage abstraction (real code: OQ-23). Telemetry uses are reserved and not
 simulated here. Measures PSNR of the full and floor-only reconstructions, the model prediction (H1, H2 of
 [P1 §D.1]), T_eq, beta_up, floor share, and encode/decode time (latency, VT-20).
-[P1 Table 13 phases 1-2] [USER-PROMPT §6.1 D9]
+[P1 Table 13 phases 1-2] [TEAM-BRIEF §6.1 D9]
 """
 from __future__ import annotations
 

@@ -1,1 +1,1 @@
-"""Mission simulator. [P2] [USER-PROMPT §6.1 D9]"""
+"""Mission simulator. [P2] [TEAM-BRIEF §6.1 D9]"""

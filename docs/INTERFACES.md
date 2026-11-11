@@ -1,6 +1,6 @@
 # Interfaces — typed contracts between modules
 
-Status: **Phase 1 draft for review**. Code below is *specification* in Python syntax. It becomes `nidar/common/contracts/*.py` in Phase 2 [USER-PROMPT §8 Phase 2].
+Status: **Phase 1 draft for review**. Code below is *specification* in Python syntax. It becomes `nidar/common/contracts/*.py` in Phase 2 [TEAM-BRIEF §8 Phase 2].
 
 Tag conventions: [ARCHITECTURE.md §0](ARCHITECTURE.md#0-conventions).
 
@@ -15,8 +15,8 @@ Tag conventions: [ARCHITECTURE.md §0](ARCHITECTURE.md#0-conventions).
 | 3 | Image coordinates are **source-frame pixels**, top-left origin | [ADIAT-inspired: `StreamDetection` docstring] |
 | 4 | SI units; positions in the local inertial frame F_I (metres); quaternion body→inertial, scalar-first (q_w, q_x, q_y, q_z) | [P2 §1.2 Eq. 8–9] |
 | 5 | Every message carries `t_source` (seconds, sender clock) and `drone_id` where applicable. The GCS reconciles by timestamp | [P2 §12.1] |
-| 6 | Messages are immutable (`frozen=True`). Arrays are `numpy.ndarray` with documented shape | [USER-PROMPT §6.2] |
-| 7 | Fields whose value depends on an open question **have no default** and name the OQ in their docstring | [USER-PROMPT §0.4] |
+| 6 | Messages are immutable (`frozen=True`). Arrays are `numpy.ndarray` with documented shape | [TEAM-BRIEF §6.2] |
+| 7 | Fields whose value depends on an open question **have no default** and name the OQ in their docstring | [TEAM-BRIEF §0.4] |
 | 8 | Every wire message has a `schema_version`. Readers accept older versions (backward compatible) | [ADIAT-inspired: versioned result files] |
 
 ```python
@@ -429,7 +429,7 @@ No other input path exists in the UI [BRIEF §3] [P2 §14.3].
 
 ## 9. Onboard component protocols
 
-Each one is swappable: a Python reference for simulation, a compiled implementation for flight ([ARCHITECTURE.md §10](ARCHITECTURE.md#10-language-and-tooling-user-prompt-62)).
+Each one is swappable: a Python reference for simulation, a compiled implementation for flight ([ARCHITECTURE.md §10](ARCHITECTURE.md#10-language-and-tooling-team-brief-62)).
 
 ```python
 class Estimator(Protocol):            # ES-EKF, 15-dim error state   [P2 §4.1]
@@ -498,5 +498,5 @@ class PayloadMechanism(Protocol):     # [P2 §6.4 Exc. 4]  design: OQ-01, OQ-20
 }
 ```
 
-- Unknown names, or a platform mismatch, fail loudly with the component name [ADIAT-inspired: CLAUDE.md §2.3].
+- Unknown names, or a platform mismatch, fail loudly with the component name [ADIAT-inspired: ADIAT-standards §2.3].
 - The `sources` field feeds the traceability check in Phase 2.

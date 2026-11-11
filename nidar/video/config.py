@@ -2,7 +2,7 @@
 
 ``paper_pilot_profile`` returns the values Paper 1 used in its own pilot / examples, clearly labelled. It is
 for simulation and tests only and is NOT a statement about our link (OQ-03, OQ-12, OQ-13, OQ-23, OQ-24).
-Parameters follow [P1 §3.1, §D.2, Table 21]; "no default for open questions" is [USER-PROMPT §0.4].
+Parameters follow [P1 §3.1, §D.2, Table 21]; "no default for open questions" is [TEAM-BRIEF §0.4].
 """
 from __future__ import annotations
 

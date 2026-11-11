@@ -2,7 +2,7 @@
 
 Status: **Phase 2 skeleton created** on branch `phase2/skeleton` (see "Phase 2 status" at the end).
 
-**Starting point:** the tree you suggested [USER-PROMPT §6.2].
+**Starting point:** the tree you suggested [TEAM-BRIEF §6.2].
 **Adaptations**, each justified in the table further down:
 - `swarm/` is split from `onboard/` along the GCS vs drone line.
 - `video/` is split into encoder / decoder / certificates.
@@ -10,9 +10,8 @@ Status: **Phase 2 skeleton created** on branch `phase2/skeleton` (see "Phase 2 s
 
 ```
 NiDaR/
-├── NIDAR_claude_code_prompt.md        # your brief to me (kept at root, unchanged)
 ├── docs/
-│   ├── sources/                        # the 3 source PDFs (copies)  [USER-PROMPT §10]
+│   ├── sources/                        # the 3 source PDFs (copies)  [TEAM-BRIEF §10]
 │   ├── ARCHITECTURE.md  VIDEO_SUBSYSTEM.md  INTERFACES.md  TRACEABILITY.md
 │   ├── REPO_LAYOUT.md  RISK_REGISTER.md  OPEN_QUESTIONS.md  IDEAS_PENDING.md
 ├── nidar/
@@ -70,7 +69,7 @@ NiDaR/
 │   ├── paper1/                         # VT-01 … VT-19   (VIDEO_SUBSYSTEM.md §11)
 │   ├── paper2/                         # closed-form checks, e.g. Eq. 155 (1.962 N), Eq. 174, Eq. 230 (0.427 m/s^2)
 │   ├── contracts/                      # same tests run on Python reference and compiled implementations
-│   └── traceability/                   # fails if a requirement lacks module or test   [USER-PROMPT §8 Phase 2]
+│   └── traceability/                   # fails if a requirement lacks module or test   [TEAM-BRIEF §8 Phase 2]
 ├── pyproject.toml                      # deps pinned; toolchain OQ-26
 └── .gitignore
 ```
@@ -83,8 +82,8 @@ NiDaR/
 | `video/certificates/` as its own package | The certificate is the safety argument [P1 Thm 1–4]. It must be testable on its own and reused offline by `tools/` | [P1 Prop. 11, Prop. 18] |
 | `tools/build_certified_grid.py` | The grid is computed offline. Runtime only *loads* it, so runtime safety does not depend on runtime sampling | [P1 Prop. 18] |
 | `onboard/automaton/mode_tables/` | Two incompatible Paper 2 mode sets. Table-driven, so the choice is data, not code | OQ-05a [ADIAT-inspired: config-driven] |
-| `gcs/controllers` + `views` + `services` split | UI wiring separated from logic | [ADIAT-inspired: CLAUDE.md §2.1] |
-| `tests/contracts/` | Same contract tests on the Python reference and the compiled implementation | [USER-PROMPT §6.2 "keep onboard real-time components behind interfaces"] |
+| `gcs/controllers` + `views` + `services` split | UI wiring separated from logic | [ADIAT-inspired: ADIAT-standards §2.1] |
+| `tests/contracts/` | Same contract tests on the Python reference and the compiled implementation | [TEAM-BRIEF §6.2 "keep onboard real-time components behind interfaces"] |
 
 ## Phase 2 status
 
@@ -180,6 +179,6 @@ These wait for the video-format and radio decisions (OQ-12, OQ-03/10, OQ-23).
 - the remaining Phase 4 interpretations (OQ-32..34)
 
 ## What is *not* in the repo
-- ADIAT source: patterns only, clean-room [USER-PROMPT §4].
+- ADIAT source: patterns only, clean-room [TEAM-BRIEF §4].
 - The dataset images or weights: they are referenced by path or URL to your NIDAR repo [DATASET]. They are not vendored, because of size (98 MB) and licence (OQ-08a).
 - Any cloud, deployment or website code: there is no runtime network [BRIEF §5].

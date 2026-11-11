@@ -2,7 +2,7 @@
 
 Every algorithm stub raises :class:`NotYetImplemented` naming the component, the source it will
 implement, and the phase/approval it waits for, so a stub can never be mistaken for a result.
-[USER-PROMPT §8 Phase 2 "empty module stubs with docstrings citing paper equations"]
+[TEAM-BRIEF §8 Phase 2 "empty module stubs with docstrings citing paper equations"]
 """
 from __future__ import annotations
 

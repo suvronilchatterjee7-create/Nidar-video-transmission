@@ -1,5 +1,5 @@
 """Registry tests: CT-03 (fail loudly), CT-08 (registered classes match their interfaces).
-[ADIAT-inspired: algorithms.conf, CLAUDE.md §2.3]"""
+[ADIAT-inspired: algorithms.conf, ADIAT-standards §2.3]"""
 from __future__ import annotations
 
 import importlib

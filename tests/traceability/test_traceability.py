@@ -1,5 +1,5 @@
 """Traceability gate: fails if any requirement in docs/TRACEABILITY.md lacks a resolvable module or a
-known test, or if any implemented test ID points at a missing test. [USER-PROMPT §8 Phase 2, §6.1 D10]
+known test, or if any implemented test ID points at a missing test. [TEAM-BRIEF §8 Phase 2, §6.1 D10]
 """
 from __future__ import annotations
 

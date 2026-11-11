@@ -1,5 +1,5 @@
 """Kinematic multi-drone mission simulator driving onboard/ and gcs/ through the contracts.
-[P2 §1-§14] [USER-PROMPT §6.1 D9]
+[P2 §1-§14] [TEAM-BRIEF §6.1 D9]
 
 Phase 2 stub: every callable raises ``NotYetImplemented``.
 """

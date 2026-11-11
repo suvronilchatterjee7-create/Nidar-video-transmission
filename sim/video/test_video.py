@@ -3,7 +3,7 @@
 ``moving_scene``: textured background plus moving objects, generated in numpy (always available).
 ``ffmpeg_source``: ffmpeg's lavfi generators (e.g. testsrc2, mandelbrot) as raw yuv420p, if ffmpeg is on PATH.
 Neither is real drone footage; results on them say nothing about our camera (OQ-12) [P1 §D.6 limits].
-[USER-PROMPT §6.1 D9]
+[TEAM-BRIEF §6.1 D9]
 """
 from __future__ import annotations
 

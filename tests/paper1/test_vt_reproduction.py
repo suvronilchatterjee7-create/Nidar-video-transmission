@@ -1,6 +1,6 @@
 """Phase 3: reproduce Paper 1's published numbers from our own implementation (VT-01..VT-19).
 
-Rules [USER-PROMPT §8 Phase 3]: every expected value below is copied from the paper; tolerances reflect the
+Rules [TEAM-BRIEF §8 Phase 3]: every expected value below is copied from the paper; tolerances reflect the
 paper's printed precision or Monte-Carlo noise; nothing is tuned. Numbers we do NOT reproduce are
 ``xfail(strict=True)`` with the measured value in the reason, so a future fix shows up as XPASS.
 Full results: docs/REPRODUCTION_P1.md.

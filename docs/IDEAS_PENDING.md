@@ -1,6 +1,6 @@
 # Ideas Pending — NIDAR RescueSwarm
 
-Rule [USER-PROMPT §0.3]: any idea **not** supported by the Mission Brief, Paper 1 or Paper 2 goes here first. Nothing on this page is implemented or assumed by any other document. **You decide.**
+Rule [TEAM-BRIEF §0.3]: any idea **not** supported by the Mission Brief, Paper 1 or Paper 2 goes here first. Nothing on this page is implemented or assumed by any other document. **You decide.**
 
 The architecture docs refer to these ideas only as "see IDEA-nn (not adopted)".
 

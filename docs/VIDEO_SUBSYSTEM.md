@@ -1,6 +1,6 @@
 # Video Subsystem — Paper 1 design turned into modules
 
-Status: **Phase 1 draft for review** · Deliverable D5 [USER-PROMPT §6.1] · Primary source: [P1] (`docs/sources/paper1_video_transmission.pdf`)
+Status: **Phase 1 draft for review** · Deliverable D5 [TEAM-BRIEF §6.1] · Primary source: [P1] (`docs/sources/paper1_video_transmission.pdf`)
 
 Tag conventions: [ARCHITECTURE.md §0](ARCHITECTURE.md#0-conventions).
 
@@ -29,7 +29,7 @@ T_eq is the **rate–distortion-equivalent throughput** on a state-independent r
 
 ## 2. Evidence status: read this first
 
-What Paper 1 supports and what it does not. Carried verbatim in spirit from [P1 §7, §8, Table 12] [USER-PROMPT §0.5].
+What Paper 1 supports and what it does not. Carried verbatim in spirit from [P1 §7, §8, Table 12] [TEAM-BRIEF §0.5].
 
 | Claim | Status in the paper | Our level |
 |---|---|---|
@@ -58,7 +58,7 @@ What Paper 1 supports and what it does not. Carried verbatim in spirit from [P1 
 
 **When the paper says a digital codec should still win** [P1 §7.3]: SNR known to within a few dB; long GoPs and B-frames allowed; bandwidth ratio well below 1; low-entropy or pre-compressed source; no encoder-complexity limit. Whether our link sits in that regime is OQ-03 / RISK-V02.
 
-**Reference code.** `floorlab.py`, `evallab.py`, `runeval.py` and `runh264.py` are named in [P1 §A, §E] but are **not available to us**. Everything here is re-derived from the equations and checked against published tables (§11) [USER-PROMPT §2.4].
+**Reference code.** `floorlab.py`, `evallab.py`, `runeval.py` and `runh264.py` are named in [P1 §A, §E] but are **not available to us**. Everything here is re-derived from the equations and checked against published tables (§11) [TEAM-BRIEF §2.4].
 
 ---
 
@@ -339,13 +339,13 @@ How W is shared among drones is **not in any source** (OQ-11). The architecture 
 
 ---
 
-## 11. Verification plan (Phase 3, only after approval) [USER-PROMPT §8 Phase 3]
+## 11. Verification plan (Phase 3, only after approval) [TEAM-BRIEF §8 Phase 3]
 
 > **Phase 4 status:** the full pipeline is built; end-to-end results are in [VIDEO_PIPELINE.md](VIDEO_PIPELINE.md).
 >
 > **Phase 3 status:** VT-01 to VT-19 are implemented. Results, including what did **not** reproduce, are in [REPRODUCTION_P1.md](REPRODUCTION_P1.md). VT-20 waits for L_max (OQ-13).
 
-Each check re-implements the closed form from the PDF and compares with the **published** number. A mismatch is reported, never tuned away [USER-PROMPT §8].
+Each check re-implements the closed form from the PDF and compares with the **published** number. A mismatch is reported, never tuned away [TEAM-BRIEF §8].
 
 | Test id | Reproduces | Inputs (from the paper) | Expected | Tag |
 |---|---|---|---|---|

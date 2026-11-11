@@ -1,11 +1,11 @@
 """Static architecture rules checked on the source tree (no imports executed).
 
 - CT-01: no internet / socket client imports in the runtime package [BRIEF §5]
-- CT-04: no print() in runtime code [ADIAT-inspired: CLAUDE.md §2.4]
+- CT-04: no print() in runtime code [ADIAT-inspired: ADIAT-standards §2.4]
 - layering: runtime never imports sim/ or tests/; onboard, swarm, link, video never import gcs
   (docs/ARCHITECTURE.md §3)
 - GT-14: the GCS display predictor (gcs.global_state) is never used by onboard control [P2 §14.3]
-- every module carries a source tag in its docstring [USER-PROMPT §0.2]
+- every module carries a source tag in its docstring [TEAM-BRIEF §0.2]
 """
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[2]
 RUNTIME = ROOT / "nidar"
 NETWORK_MODULES = {"socket", "ssl", "http", "urllib", "requests", "httpx", "aiohttp", "websocket", "websockets",
                    "ftplib", "smtplib", "paramiko", "grpc", "boto3"}
-TAGS = ("[BRIEF", "[P1", "[P2", "[ADIAT-inspired", "[USER-PROMPT", "[DATASET")
+TAGS = ("[BRIEF", "[P1", "[P2", "[ADIAT-inspired", "[TEAM-BRIEF", "[DATASET")
 
 
 def _py_files(base: Path) -> list[Path]:

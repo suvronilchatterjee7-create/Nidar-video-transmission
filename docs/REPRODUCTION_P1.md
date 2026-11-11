@@ -5,8 +5,8 @@ Status: **Phase 3 result** · Branch `phase3/video-reference` · Date 2026-11-11
 **What was done.** Paper 1's closed forms and certificate machinery were re-implemented from the equations. The paper's reference code (`floorlab.py`, etc.) is not available.
 
 **Comparison method:**
-- Our numbers are compared with every published table the prompt listed: Tables 5, 7, 8, 9, 10, 14, 15, 16, 17, 18, 19 and 20.
-- **Nothing was tuned to force a match** [USER-PROMPT §8 Phase 3].
+- Our numbers are compared with every published table the team brief listed: Tables 5, 7, 8, 9, 10, 14, 15, 16, 17, 18, 19 and 20.
+- **Nothing was tuned to force a match** [TEAM-BRIEF §8 Phase 3].
 - Where a number does not reproduce, the test is `xfail(strict=True)` with our measured value in the reason. If a later change makes it match, the test turns red (XPASS), so the report must then be updated.
 
 **Equations.** They were taken from a UTF-8 re-extraction of the PDF, which preserves the Greek symbols. The Phase 1 transcription notes for Eq. 19 and Eq. 20 are resolved; see [VIDEO_SUBSYSTEM.md §4.7, §4.13](VIDEO_SUBSYSTEM.md).

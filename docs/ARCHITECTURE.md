@@ -24,7 +24,7 @@ Every design decision carries one or more tags:
 | `[P1 §x / Eq. y / Prop. z / Thm t / Table k]` | Paper 1, video transmission. §A–§E are the paper's lettered sections after §9 | `docs/sources/paper1_video_transmission.pdf` |
 | `[P2 §x / Eq. y]` | Paper 2, swarm model. Where the PDF repeats a section, both copies are cited, e.g. `§5.3/§7.3` | `docs/sources/paper2_swarm_model.pdf` |
 | `[ADIAT-inspired: file/pattern]` | Method taken from ADIAT (GPL-3.0) as a *pattern*; our code is a clean-room re-implementation | upstream repo, commit `00bf118` |
-| `[USER-PROMPT §x]` | Your own instruction in `NIDAR_claude_code_prompt.md` (language, layout, process) | project root |
+| `[TEAM-BRIEF §x]` | The team lead's internal project brief: process rules, deliverables D1–D10, language and layout choices. It is not published in this repository | team lead |
 | `[DATASET: path]` | Your team repo `suvronilchatterjee7-create/NIDAR` | GitHub |
 | `OQ-nn` | Undecided: see [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md). The design leaves a named slot and no default | — |
 | `IDEA-nn` | **Not adopted**: see [IDEAS_PENDING.md](IDEAS_PENDING.md) | — |
@@ -39,7 +39,7 @@ Used in [TRACEABILITY.md](TRACEABILITY.md) and throughout:
 - **REQUIRED**: a hard rule from the Brief. It is evidenced only by a future test.
 - **OPEN**: blocked on an OQ item.
 
-No document in this repo presents a TARGET as a guarantee [USER-PROMPT §0.5].
+No document in this repo presents a TARGET as a guarantee [TEAM-BRIEF §0.5].
 
 ---
 
@@ -55,7 +55,7 @@ No document in this repo presents a TARGET as a guarantee [USER-PROMPT §0.5].
 - the flight-controller firmware internals (OQ-29)
 - anything in [IDEAS_PENDING.md](IDEAS_PENDING.md)
 
-**Hard environmental rule:** no GSM / LTE / 5G / public Wi-Fi / internet / cloud, and no tether, at runtime [BRIEF §5]. No component may assume DNS, NTP-over-internet, a cloud broker or a signalling server. This includes the ADIAT flight viewer's Cloudflare Worker, which is excluded [USER-PROMPT §4.1.11].
+**Hard environmental rule:** no GSM / LTE / 5G / public Wi-Fi / internet / cloud, and no tether, at runtime [BRIEF §5]. No component may assume DNS, NTP-over-internet, a cloud broker or a signalling server. This includes the ADIAT flight viewer's Cloudflare Worker, which is excluded [TEAM-BRIEF §4.1.11].
 
 ---
 
@@ -98,11 +98,11 @@ Four runtime layers plus a shared `common` layer. The layering rules are adapted
 - helpers are cross-cutting only
 - generated UI files are never hand-edited
 
-[ADIAT-inspired: `CLAUDE.md` §2.1]
+[ADIAT-inspired: `ADIAT-standards` §2.1]
 
 ```mermaid
 flowchart TB
-  subgraph L4["Simulation & Test layer  (offline only)  [USER-PROMPT §6.1 D9]"]
+  subgraph L4["Simulation & Test layer  (offline only)  [TEAM-BRIEF §6.1 D9]"]
     SIMCH["sim/channel<br/>block-Rayleigh, delayed SNR<br/>[P1 Table 13 ph.1-2] [P1 A7]"]
     SIMMIS["sim/mission<br/>multi-drone mission sim [P2 §1-§14]"]
     TESTS["tests/<br/>paper-table reproduction"]
@@ -146,8 +146,8 @@ flowchart TB
 | Onboard Autonomy | state estimation, perception, confirmation, local planning, control, failsafes, payload | depend on the GCS for safety; any failsafe must work with the link down | [P2 §9.1 Eq. 247–249] [BRIEF §8] |
 | Link & Video | radio access, resource split per GoP, telemetry framing, Paper 1 encoder side, SNR-report handling | make mission decisions | [P1 §5, §C] [P2 §12.1] |
 | GCS | mission ingest, preflight, DWVT partition, auction, global state, display, Paper 1 decoder | offer any operator control beyond the 4 Brief actions | [BRIEF §3–§4] [P2 §12.3.2, §14.3] |
-| Simulation & Test | channel and mission simulators, reproduction of the papers' tables, scenario files | be imported by runtime code | [USER-PROMPT §6.1 D9] [P1 Table 13] |
-| common | contracts, units, registry, logging, persistence | contain feature workflows | [ADIAT-inspired: `CLAUDE.md` §2.1 helpers rule] |
+| Simulation & Test | channel and mission simulators, reproduction of the papers' tables, scenario files | be imported by runtime code | [TEAM-BRIEF §6.1 D9] [P1 Table 13] |
+| common | contracts, units, registry, logging, persistence | contain feature workflows | [ADIAT-inspired: `ADIAT-standards` §2.1 helpers rule] |
 
 **Where computation runs** (all per [P2] unless marked):
 - **DWVT partition and survivor auction:** the GCS [P2 §5.3, §7.1 "continuously recalculated by the GCS"].
@@ -213,7 +213,7 @@ flowchart LR
 |---|---|---|---|
 | Drone i | Airframe about 4.8 kg loaded (TARGET from P2); IMU, LiDAR, RGB, GNSS (listed); optical flow + barometer (OQ-19); companion computer "Jetson-class" (TARGET); flight controller (OQ-29); SDR-class radio (OQ-10); payload mechanism (OQ-01, OQ-20) | `onboard/*`, `swarm/confirmation`, `link/*` (drone side), `video/encoder*` | [P2 §2.1, §8.2, §8.4] |
 | GCS | Laptop/PC (spec unknown); radio front end (OQ-03) | `gcs/*`, `swarm/dwvt`, `swarm/auction`, `link/*` (ground side), `video/decoder*` | [P2 §12] [BRIEF §4] |
-| Dev / CI | Developer PC, offline | `sim/*`, `tests/*` | [USER-PROMPT §6.2] |
+| Dev / CI | Developer PC, offline | `sim/*`, `tests/*` | [TEAM-BRIEF §6.2] |
 
 ---
 
@@ -457,17 +457,17 @@ stateDiagram-v2
 |---|---|---|
 | Contracts | One normalised result shape per stream type (`ProcessResult[T]`) with `error_message`. Adapters wrap any component that does not natively produce it. Orchestrators never crash on a bad item | [ADIAT-inspired: `streaming/contracts.py`, `adapters.py`, `StreamAnalyzeService.process_frame` try/except] |
 | Pixel coordinates | Detections are always in **source-frame pixels**, top-left origin. Consumers never need to know the processing resolution | [ADIAT-inspired: `StreamDetection` docstring] |
-| Registry | JSON registry maps component names to module, class and platforms (`onboard` / `gcs` / `sim`). No hard-coded routing tables. Unknown names fail loudly | [ADIAT-inspired: `algorithms.conf`, CLAUDE.md §2.3] |
+| Registry | JSON registry maps component names to module, class and platforms (`onboard` / `gcs` / `sim`). No hard-coded routing tables. Unknown names fail loudly | [ADIAT-inspired: `algorithms.conf`, ADIAT-standards §2.3] |
 | Units and frames | SI throughout; local inertial frame F_I (ENU assumed, pending OQ-22 for the geodetic datum); body frame F_B; quaternion body→inertial | [P2 §1.2 Eq. 8–9] |
 | Time | Every message carries a source timestamp. GCS fuses by timestamp, with interpolation for display only | [P2 §12.1, §14.3] |
-| Logging | One central logger service. Errors name the component, operation and input (drone id, GoP index, file). No bare `print` in runtime paths | [ADIAT-inspired: `LoggerService`, CLAUDE.md §2.4] |
-| Persistence | Versioned, backward-compatible mission log: states, detections, tags, assignments, deliveries, video statistics. Used for replay in `sim/` | [ADIAT-inspired: versioned result files] [USER-PROMPT §6.1 D10] |
+| Logging | One central logger service. Errors name the component, operation and input (drone id, GoP index, file). No bare `print` in runtime paths | [ADIAT-inspired: `LoggerService`, ADIAT-standards §2.4] |
+| Persistence | Versioned, backward-compatible mission log: states, detections, tags, assignments, deliveries, video statistics. Used for replay in `sim/` | [ADIAT-inspired: versioned result files] [TEAM-BRIEF §6.1 D10] |
 | Low-latency capture | Drop stale frames; frame-rate cap; one worker per pipeline; thread-safe config updates. Applies to the detector input and the video encoder input | [ADIAT-inspired: StreamAnalyze capture pattern] |
 | Detection post-filters | Temporal voting, NMS and clustering are **only** what Paper 2's K-frame consistency and r_tol fusion require. Extra filters (aspect ratio, region masks) are not adopted unless you ask | [P2 Eq. 261–263] [ADIAT-inspired: post-filters] |
 | Tiled detection | ADIAT's tiled ONNX inference with provider fallback is held as a detector **implementation option** behind the detector interface. Not required by Paper 2 | [ADIAT-inspired: `AIPersonDetectorService`] |
 | Batch/offline processing | Worker pool with per-item timeout, failure isolation and fast cancel, for `sim/` sweeps and certificate sampling | [ADIAT-inspired: AnalyzeService] |
-| Tests | Deterministic (fixed seeds), offline, no network. Lint gate. Traceability check fails if a requirement has no module or test (Phase 2) | [ADIAT-inspired: CLAUDE.md tests] [USER-PROMPT §8 Phase 2] |
-| Licensing | No ADIAT source copied; patterns re-implemented clean-room. YOLOv8 weights licence flagged (OQ-08a) | [USER-PROMPT §4] |
+| Tests | Deterministic (fixed seeds), offline, no network. Lint gate. Traceability check fails if a requirement has no module or test (Phase 2) | [ADIAT-inspired: ADIAT-standards tests] [TEAM-BRIEF §8 Phase 2] |
+| Licensing | No ADIAT source copied; patterns re-implemented clean-room. YOLOv8 weights licence flagged (OQ-08a) | [TEAM-BRIEF §4] |
 
 ---
 
@@ -498,18 +498,18 @@ stateDiagram-v2
 
 ---
 
-## 10. Language and tooling [USER-PROMPT §6.2]
+## 10. Language and tooling [TEAM-BRIEF §6.2]
 
 | Part | Language | Why | Tags |
 |---|---|---|---|
-| Paper 1 maths, certificates, channel simulator, mission simulator, GCS logic, tests | **Python 3** with numpy/scipy (version: OQ-26) | Matches the paper's own reference approach (closed forms + Monte Carlo) and the standard scientific stack. Fast to verify against tables | [USER-PROMPT §6.2] [P1 §A] |
+| Paper 1 maths, certificates, channel simulator, mission simulator, GCS logic, tests | **Python 3** with numpy/scipy (version: OQ-26) | Matches the paper's own reference approach (closed forms + Monte Carlo) and the standard scientific stack. Fast to verify against tables | [TEAM-BRIEF §6.2] [P1 §A] |
 | NMPC 50 Hz with RK4, SQP-RTI | Generated C via acados/CasADi, called through a Python interface in simulation | P2 names CasADi/acados. Python alone cannot be assumed to meet 20 ms; the 8–12 ms claim is unvalidated | [P2 §8.2, §10.2] |
 | ESKF 200 Hz IMU propagation, NDT, TSDF | C++ (or an existing compiled library) behind the `Estimator` / `TerrainMap` interfaces | Rate and point-cloud volume. Python reference used only in simulation | [P2 §2.1, §4.2] |
 | Video baseband: spreading, mapping, pilots, limiter at W Msym/s; floor channel code | Compiled / SDR toolchain (choice tied to OQ-03, OQ-10, OQ-23) | Real-time sample rates in the MHz range. Python implements the *reference* maths only | [P1 §5.1 E7, §B.1, §C.1, §6.6] |
 | Detector inference | ONNX / TensorRT on the companion computer behind the `PersonDetector` interface | Model is YOLOv8-pose [DATASET]; runtime kept swappable | [P2 §4.3] [ADIAT-inspired: provider fallback] |
 | GCS UI | Python (desktop UI toolkit TBD in Phase 2; no web/cloud dependency) | Single local operator station | [BRIEF §4, §5] |
 
-Rule: every real-time component sits behind a Protocol in `INTERFACES.md`, so the Python reference and the compiled implementation are interchangeable and tested against the same contract tests [USER-PROMPT §6.2].
+Rule: every real-time component sits behind a Protocol in `INTERFACES.md`, so the Python reference and the compiled implementation are interchangeable and tested against the same contract tests [TEAM-BRIEF §6.2].
 
 ---
 

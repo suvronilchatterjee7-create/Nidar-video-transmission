@@ -26,6 +26,6 @@
     {"name": "partition_service", "interface": "nidar.gcs.services.partition_service.PartitionService", "module": "nidar.gcs.services.partition_service", "class": "PartitionService", "platforms": ["gcs", "sim"], "sources": ["P2 §7.1"], "evidence": "OPEN (OQ-05c')"},
     {"name": "auction_service", "interface": "nidar.gcs.services.auction_service.AuctionService", "module": "nidar.gcs.services.auction_service", "class": "AuctionService", "platforms": ["gcs", "sim"], "sources": ["P2 §7.3"], "evidence": "OPEN (OQ-01, OQ-05c)"},
     {"name": "video_service", "interface": "nidar.gcs.services.video_service.VideoService", "module": "nidar.gcs.services.video_service", "class": "VideoService", "platforms": ["gcs", "sim"], "sources": ["BRIEF §4", "P1 §5.1"], "evidence": "OPEN (OQ-02, OQ-09)"},
-    {"name": "mission_simulator", "interface": "sim.mission.kinematic.MissionSimulator", "module": "sim.mission.kinematic", "class": "MissionSimulator", "platforms": ["sim"], "sources": ["P2 §1-§14", "USER-PROMPT §6.1 D9"], "evidence": "INFRA"}
+    {"name": "mission_simulator", "interface": "sim.mission.kinematic.MissionSimulator", "module": "sim.mission.kinematic", "class": "MissionSimulator", "platforms": ["sim"], "sources": ["P2 §1-§14", "TEAM-BRIEF §6.1 D9"], "evidence": "INFRA"}
   ]
 }

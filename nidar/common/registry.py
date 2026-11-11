@@ -2,7 +2,7 @@
 
 Components are registered by name in ``registry.json`` with interface, module, class, platforms,
 sources and evidence level. No hard-coded routing tables; unknown names and platform mismatches fail
-loudly, naming the component. [ADIAT-inspired: algorithms.conf, CLAUDE.md §2.3]
+loudly, naming the component. [ADIAT-inspired: algorithms.conf, ADIAT-standards §2.3]
 The ``sources`` field feeds the traceability check (tests/traceability).
 """
 from __future__ import annotations
@@ -17,7 +17,7 @@ from typing import Iterable
 PLATFORMS = frozenset({"onboard", "gcs", "sim"})
 EVIDENCE_LEVELS = frozenset({"PROVED", "REPRODUCED", "SIMULATED", "TARGET", "REQUIRED", "OPEN", "INFRA"})
 DEFAULT_PATH = Path(__file__).with_name("registry.json")
-SOURCE_TAG = re.compile(r"^(BRIEF|P1|P2|ADIAT-inspired|USER-PROMPT|DATASET)\b")
+SOURCE_TAG = re.compile(r"^(BRIEF|P1|P2|ADIAT-inspired|TEAM-BRIEF|DATASET)\b")
 
 
 class RegistryError(ValueError):
@@ -58,7 +58,7 @@ class ComponentSpec:
                                 f"{sorted(PLATFORMS)}")
         if not spec.sources or not all(SOURCE_TAG.match(s) for s in spec.sources):
             raise RegistryError(f"{spec.name}: every component needs >= 1 source tag "
-                                "(BRIEF/P1/P2/ADIAT-inspired/USER-PROMPT/DATASET) [USER-PROMPT §0.2]")
+                                "(BRIEF/P1/P2/ADIAT-inspired/TEAM-BRIEF/DATASET) [TEAM-BRIEF §0.2]")
         if spec.evidence.split()[0] not in EVIDENCE_LEVELS:
             raise RegistryError(f"{spec.name}: evidence must start with one of {sorted(EVIDENCE_LEVELS)}")
         return spec

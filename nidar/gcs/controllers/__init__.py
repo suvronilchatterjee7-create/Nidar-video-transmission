@@ -1,1 +1,1 @@
-"""GCS controllers: UI orchestration only. [ADIAT-inspired: CLAUDE.md §2.1]"""
+"""GCS controllers: UI orchestration only. [ADIAT-inspired: ADIAT-standards §2.1]"""

@@ -2,7 +2,7 @@
 
 Status: Phase 1 draft · Branch `docs/phase1-architecture` · Owner of every decision below: **the team lead (you)**.
 
-**Rule** [USER-PROMPT §0.4]: when the sources disagree or say nothing, the architecture does **not** pick a side. Each item below is either:
+**Rule** [TEAM-BRIEF §0.4]: when the sources disagree or say nothing, the architecture does **not** pick a side. Each item below is either:
 - left as a named parameter with no default, or
 - shown as alternatives behind one interface.
 
@@ -17,7 +17,7 @@ Tag key: see [ARCHITECTURE.md §0](ARCHITECTURE.md#0-conventions).
 
 ---
 
-## A. Questions raised in the prompt (§7)
+## A. Questions raised in the team brief (§7)
 
 ### OQ-01 · Kit count vs survivor count — OPEN
 - **Sources:** [BRIEF Scenario, §1] says up to 10 survivors, and "deliver a survivor kit to each identified survivor". [P2 §1.3, §8.4] assumes one 200 g kit per drone. [P2 §1.2 Eq. 7] sets N = 4.
@@ -30,7 +30,7 @@ Tag key: see [ARCHITECTURE.md §0](ARCHITECTURE.md#0-conventions).
 - **Options visible in the sources:** none resolve this. Possible directions (not chosen): several kits per drone; more drones; accept partial delivery.
 
 ### OQ-02 · Which video method feeds the GCS live video — OPEN
-- **Sources:** [P2 §12.1 / §15.1.1] says "H.265 hardware encoding with ROI", with bitrate boosted for the drone that has a candidate survivor. [P1 §5] specifies the hybrid floor + analogue refinement scheme. [USER-PROMPT §6.1 D5] requires the Paper 1 scheme.
+- **Sources:** [P2 §12.1 / §15.1.1] says "H.265 hardware encoding with ROI", with bitrate boosted for the drone that has a candidate survivor. [P1 §5] specifies the hybrid floor + analogue refinement scheme. [TEAM-BRIEF §6.1 D5] requires the Paper 1 scheme.
 - **Interaction:** the Paper 1 refinement layer sends continuous-amplitude symbols, so it cannot travel as packets through Paper 2's bit-rate scheduler (see OQ-14).
 - **Architecture stance:** the GCS video panel reads decoded frames through a single `VideoSource` contract ([INTERFACES.md §7](INTERFACES.md#7-video-contracts)). The Paper 1 pipeline is designed in depth. The H.265 path is listed as a Paper 2 alternative and not designed.
 - **Blocks:** whether `video/` also needs an H.265 adapter. It also determines the radio choice (OQ-03, OQ-10).

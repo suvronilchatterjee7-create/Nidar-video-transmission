@@ -2,7 +2,7 @@
 
 Records states, detections, tags, assignments, deliveries and video statistics for replay in
 ``sim/``. Readers accept older schema versions through registered migrations and refuse newer ones.
-[ADIAT-inspired: versioned, backward-compatible result files] [USER-PROMPT §6.1 D10]
+[ADIAT-inspired: versioned, backward-compatible result files] [TEAM-BRIEF §6.1 D10]
 """
 from __future__ import annotations
 

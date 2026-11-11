@@ -2,7 +2,7 @@
 
 Production paths log through here, never ``print`` (ruff T20 gate). Errors carry context: which
 component, which operation, which input (drone id, GoP index, file) failed.
-[ADIAT-inspired: LoggerService; CLAUDE.md §2.4]
+[ADIAT-inspired: LoggerService; ADIAT-standards §2.4]
 """
 from __future__ import annotations
 

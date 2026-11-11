@@ -3,7 +3,7 @@
 Exactly four actions exist [BRIEF §3, §4, §8]; which are enabled depends on the mission phase
 (docs/INTERFACES.md §8, docs/ARCHITECTURE.md §7). Any other input would be manual intervention
 [BRIEF §3]. P2 lists three buttons [P2 §12.3.2]; EMERGENCY_RECALL is added per the Brief (OQ-16).
-This module is UI wiring only; it holds no mission logic. [ADIAT-inspired: CLAUDE.md §2.1]
+This module is UI wiring only; it holds no mission logic. [ADIAT-inspired: ADIAT-standards §2.1]
 """
 from __future__ import annotations
 

@@ -1,7 +1,7 @@
 # Traceability Matrix
 
 Status: **Phase 1 draft**.
-- Every requirement maps to: source → module → test → evidence level [USER-PROMPT §6.1 D10].
+- Every requirement maps to: source → module → test → evidence level [TEAM-BRIEF §6.1 D10].
 - Module paths follow [REPO_LAYOUT.md](REPO_LAYOUT.md).
 - Test IDs are **planned**; none exist yet.
 - In Phase 2, `tests/traceability/` parses this table and fails if any row lacks a module or a test.
@@ -18,7 +18,7 @@ Status: **Phase 1 draft**.
 
 | Prefix | Meaning |
 |---|---|
-| `VT-nn` | Paper 1 reproduction ([VIDEO_SUBSYSTEM.md §11](VIDEO_SUBSYSTEM.md#11-verification-plan-phase-3-only-after-approval-user-prompt-8-phase-3)) |
+| `VT-nn` | Paper 1 reproduction ([VIDEO_SUBSYSTEM.md §11](VIDEO_SUBSYSTEM.md#11-verification-plan-phase-3-only-after-approval-team-brief-8-phase-3)) |
 | `PT-nn` | Paper 2 closed-form or unit checks |
 | `MS-nn` | Mission-simulator scenario tests |
 | `CT-nn` | Contract / interface tests |
@@ -27,7 +27,7 @@ Status: **Phase 1 draft**.
 
 ## 1. Deliverables → requirements
 
-| Deliverable [USER-PROMPT §6.1] | Requirements |
+| Deliverable [TEAM-BRIEF §6.1] | Requirements |
 |---|---|
 | D1 Multi-drone collaborative system ≤ 25 kg | R-B01, R-B02, R-B03, R-B04, R-B09 |
 | D2 Single GCS, display set, 4 actions | R-B05, R-B07, R-B10, R-B11a–f, R-P2-19, R-P2-20 |
@@ -126,7 +126,7 @@ Status: **Phase 1 draft**.
 | R-M02 | Config-driven registry; unknown names fail loudly; registered classes match their interface | [ADIAT-inspired: `algorithms.conf`] | `common/registry` | CT-03, CT-08 |
 | R-M03 | Central logging with context | [ADIAT-inspired: `LoggerService`] | `common/logging` | CT-04 lint: no `print` in runtime packages |
 | R-M04 | Versioned, backward-compatible mission log | [ADIAT-inspired: result files] | `common/missionlog` | CT-05 read v1 with v2 reader |
-| R-M05 | Deterministic offline tests | [ADIAT-inspired: tests] [USER-PROMPT §9] | `tests/` | CT-06 seed audit; no network in the test environment |
+| R-M05 | Deterministic offline tests | [ADIAT-inspired: tests] [TEAM-BRIEF §9] | `tests/` | CT-06 seed audit; no network in the test environment |
 | R-M06 | Source-frame pixel coordinates for detections | [ADIAT-inspired: `StreamDetection`] | `common/contracts/perception` | CT-07 |
 
 ## 6. Coverage check (manual, Phase 1)

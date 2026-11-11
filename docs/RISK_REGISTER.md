@@ -2,7 +2,7 @@
 
 Status: **Phase 1 draft**.
 - Likelihood (L) and Impact (I) are on a 1–5 scale, judged qualitatively from the sources.
-- Mitigations listed are **only** those the sources support. Anything else points to an IDEA or OQ for you to decide [USER-PROMPT §0.3].
+- Mitigations listed are **only** those the sources support. Anything else points to an IDEA or OQ for you to decide [TEAM-BRIEF §0.3].
 
 ## Video and link (Paper 1)
 
@@ -44,6 +44,6 @@ Status: **Phase 1 draft**.
 | ID | Risk | Evidence | L | I | Mitigation | Owner |
 |---|---|---|---|---|---|---|
 | RISK-L01 | `yolov8n-pose.pt` (Ultralytics) is, to my knowledge, AGPL-3.0; onboard use may oblige source release. 7 dataset images are CC BY-SA 2.0 | [DATASET: README §7, LICENSE_LEDGER.csv] | 3 | 3 | Detector behind the `PersonDetector` interface, so it is swappable (OQ-08a) | you |
-| RISK-L02 | ADIAT is GPL-3.0; copying code would impose GPL | [USER-PROMPT §4] | 1 | 4 | Clean-room patterns only; no file copied | — |
+| RISK-L02 | ADIAT is GPL-3.0; copying code would impose GPL | [TEAM-BRIEF §4] | 1 | 4 | Clean-room patterns only; no file copied | — |
 | RISK-P01 | Reference code for Paper 1 unavailable; reproduction may fail on transcription errors | [P1 §A, §E]; OQ-30 | 1 (after Phase 3) | 3 | **Phase 3:** equations re-extracted in UTF-8; 29 checks reproduce, 2 small and 2 real mismatches reported in REPRODUCTION_P1.md, none tuned | — |
 | RISK-P02 | The synthetic experiments (Table 16, controller fixed point) don't reproduce in level, so their numbers can't be used to size *our* controller | REPRODUCTION_P1.md VT-13/18 | 5 (observed) | 2 (safety rests on the certified grid, not on these numbers) | Resize on our own model once OQ-03/12 are answered | you |

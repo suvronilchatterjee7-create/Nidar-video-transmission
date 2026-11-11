@@ -3,7 +3,7 @@
 Usage:  .venv\\Scripts\\python tools\\check.py          # fast gates
         .venv\\Scripts\\python tools\\check.py --full   # also the slow Monte-Carlo reproductions
 
-[ADIAT-inspired: CLAUDE.md lint + test gates] [USER-PROMPT §8 Phase 2 "CI/lint/test config"]
+[ADIAT-inspired: ADIAT-standards lint + test gates] [TEAM-BRIEF §8 Phase 2 "CI/lint/test config"]
 """
 from __future__ import annotations
 

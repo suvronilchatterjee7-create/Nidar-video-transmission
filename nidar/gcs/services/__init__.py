@@ -1,1 +1,1 @@
-"""GCS services (logic + I/O). [ADIAT-inspired: CLAUDE.md §2.1 layering]"""
+"""GCS services (logic + I/O). [ADIAT-inspired: ADIAT-standards §2.1 layering]"""
