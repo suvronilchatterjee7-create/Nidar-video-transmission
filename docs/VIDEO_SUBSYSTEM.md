@@ -353,6 +353,7 @@ Each check re-implements the closed form from the PDF and compares with the **pu
 | VT-17 | Margin rule | T_g = 8/30 s, ρ = 0.875, σ_s = 3 dB, σ_m = 1 dB, ε = 1e-4 | sqrt P_pred 0.853 / 1.632 / 2.036 / 2.480 / 2.832 / 3.000 dB; margin 3.17 … 11.16 dB; +n_F columns | [P1 Lemma 8, Thm 3, Table 19] |
 | VT-18 | Controller | synthetic model k = 8e3, β = 0.66, starts at 6 and 14 dB | both reach ≈ 9.41 dB in 2 steps; s ≈ −0.52 | [P1 Eq. 40, Prop. 17, Table 20] |
 | VT-19 | Violation interval | T_g = 8/30 s | 26.7 s, 267 s, 2,667 s, 26,667 s | [P1 Cor. 7] |
+| VT-20 | Latency budget | measured T_g + τ_proc per GoP | ≤ L_max (value pending OQ-13) | [P1 (L)] |
 
 **Channel simulator (D9)** [P1 Table 13 phases 1–2]:
 - correlated Rayleigh blocks (L per GoP, correlation across GoPs)

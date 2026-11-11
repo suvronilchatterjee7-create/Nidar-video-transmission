@@ -1,0 +1,373 @@
+{
+ "_comment": "Every test ID referenced by docs/TRACEABILITY.md and docs/VIDEO_SUBSYSTEM.md \u00a711. implemented -> pytest node; planned -> phase that will add it.",
+ "tests": {
+  "CT-01": {
+   "status": "implemented",
+   "node": "tests/static/test_architecture_rules.py::test_ct01_no_network_imports_in_runtime"
+  },
+  "CT-02": {
+   "status": "implemented",
+   "node": "tests/contracts/test_isolation.py::test_ct02_failure_is_isolated"
+  },
+  "CT-03": {
+   "status": "implemented",
+   "node": "tests/unit/test_registry.py::test_ct03_unknown_name_and_platform_fail_loudly"
+  },
+  "CT-04": {
+   "status": "implemented",
+   "node": "tests/static/test_architecture_rules.py::test_ct04_no_print_in_runtime"
+  },
+  "CT-05": {
+   "status": "implemented",
+   "node": "tests/unit/test_missionlog.py::test_ct05_backward_compatible_reader"
+  },
+  "CT-06": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "CT-07": {
+   "status": "implemented",
+   "node": "tests/contracts/test_contracts.py::test_ct07_detection_in_source_frame_pixels"
+  },
+  "CT-08": {
+   "status": "implemented",
+   "node": "tests/unit/test_registry.py::test_ct08_registered_classes_match_interfaces"
+  },
+  "CT-10": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "CT-11": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "CT-12": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "CT-13": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "CT-14": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "CT-15": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "GT-01": {
+   "status": "planned",
+   "phase": "GCS phase"
+  },
+  "GT-02": {
+   "status": "implemented",
+   "node": "tests/unit/test_operator_actions.py::test_gt02_exactly_four_actions_gated_by_phase"
+  },
+  "GT-03": {
+   "status": "planned",
+   "phase": "GCS phase"
+  },
+  "GT-04": {
+   "status": "planned",
+   "phase": "GCS phase"
+  },
+  "GT-05": {
+   "status": "planned",
+   "phase": "GCS phase"
+  },
+  "GT-06": {
+   "status": "planned",
+   "phase": "GCS phase"
+  },
+  "GT-07": {
+   "status": "planned",
+   "phase": "GCS phase"
+  },
+  "GT-08": {
+   "status": "planned",
+   "phase": "GCS phase"
+  },
+  "GT-09": {
+   "status": "planned",
+   "phase": "GCS phase"
+  },
+  "GT-11": {
+   "status": "planned",
+   "phase": "GCS phase"
+  },
+  "GT-12": {
+   "status": "planned",
+   "phase": "GCS phase"
+  },
+  "GT-13": {
+   "status": "planned",
+   "phase": "GCS phase"
+  },
+  "GT-14": {
+   "status": "implemented",
+   "node": "tests/static/test_architecture_rules.py::test_gt14_display_predictor_not_used_by_onboard"
+  },
+  "HW-01": {
+   "status": "planned",
+   "phase": "hardware / field"
+  },
+  "HW-02": {
+   "status": "planned",
+   "phase": "hardware / field"
+  },
+  "HW-03": {
+   "status": "planned",
+   "phase": "hardware / field"
+  },
+  "HW-04": {
+   "status": "planned",
+   "phase": "hardware / field"
+  },
+  "HW-05": {
+   "status": "planned",
+   "phase": "hardware / field"
+  },
+  "HW-06": {
+   "status": "planned",
+   "phase": "hardware / field"
+  },
+  "HW-07": {
+   "status": "planned",
+   "phase": "hardware / field"
+  },
+  "HW-08": {
+   "status": "planned",
+   "phase": "hardware / field"
+  },
+  "MS-01": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "MS-02": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "MS-03": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "MS-04": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "MS-05": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "MS-06": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "MS-07": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "MS-08": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "MS-09": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "MS-10": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "MS-11": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "MS-12": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "MS-13": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "MS-14": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "MS-15": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "MS-16": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "MS-17": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-01": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-02": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-03": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-04": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-05": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-06": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-08": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-09": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-10": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-11": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-12": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-13": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-14": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-15": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-16": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-17": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-18": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-19": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-20": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "PT-21": {
+   "status": "planned",
+   "phase": "mission / onboard phases"
+  },
+  "VT-01": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-02": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-03": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-04": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-05": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-06": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-07": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-08": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-09": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-10": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-11": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-12": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-13": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-14": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-15": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-16": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-17": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-18": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-19": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference)"
+  },
+  "VT-20": {
+   "status": "planned",
+   "phase": "Phase 3 (video reference); value needs OQ-13"
+  }
+ }
+}

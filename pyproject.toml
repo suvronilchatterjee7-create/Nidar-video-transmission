@@ -1,0 +1,50 @@
+# NIDAR RescueSwarm — reference implementation and simulation package.
+# Toolchain: Python 3.11 venv (OQ-26, proposed in Phase 0/1). [USER-PROMPT §6.2]
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nidar"
+version = "0.2.0"
+description = "NIDAR RescueSwarm: multi-drone SAR mission system (Paper 2) with Paper 1 hybrid video link"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "numpy==1.26.4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.3.3",
+    "ruff==0.6.9",
+]
+# Phase 3 will add scipy only after approval [USER-PROMPT §6.2 "do not install heavy dependencies without asking"].
+
+[tool.setuptools.packages.find]
+include = ["nidar*"]
+
+[tool.setuptools.package-data]
+"nidar.common" = ["registry.json"]
+"nidar.onboard.automaton" = ["mode_tables/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q -p no:cacheprovider"
+markers = [
+    "traceability: checks TRACEABILITY.md against the code base",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+extend-exclude = [".venv"]
+
+[tool.ruff.lint]
+# E/F/W: pycodestyle + pyflakes; I: import order; T20: no print() in runtime code
+# [ADIAT-inspired: CLAUDE.md §2.4 "no production print()"]; B: bugbear basics.
+select = ["E", "F", "W", "I", "T20", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["T20"]
+"tools/**" = ["T20"]

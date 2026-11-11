@@ -45,7 +45,7 @@ Status: **Phase 1 draft**.
 |---|---|---|---|---|---|
 | R-B01 | ≥ 2 drones in one collaborative system | [BRIEF §1, §4] | `swarm/*`, `gcs/global_state` | MS-01 (N = 2 and N = 4 runs) | REQUIRED |
 | R-B02 | Team-built airframes, no RTF | [BRIEF §2] | — (hardware) | HW-01 | REQUIRED |
-| R-B03 | Fleet AUW ≤ 25 kg | [BRIEF §2] | ARCHITECTURE §9.1 budget | HW-02 weigh-in; GT-10 preflight weight declaration | OPEN (OQ-07) |
+| R-B03 | Fleet AUW ≤ 25 kg | [BRIEF §2] | — (hardware; budget in ARCHITECTURE §9.1) | HW-02 weigh-in | OPEN (OQ-07) |
 | R-B04 | Payload 200 g, 20×10×5 cm box | [BRIEF §2] | `onboard/payload` | PT-05 mass reset uses 0.2 kg; HW-03 | REQUIRED |
 | R-B05 | Mission file loaded at setup; ≤ 300 s setup | [BRIEF §3] | `gcs/mission_loader`, `gcs/preflight` | GT-01 parse + validate; MS-02 setup timeline ≤ 300 s (sim) | OPEN (OQ-22) |
 | R-B06 | Autonomous scout → coordinate → detect → geotag → assign → drop → return within 30 min | [BRIEF §3] | `onboard/*`, `swarm/*`, `gcs/services` | MS-03 end-to-end scenario, with timing | REQUIRED; P2 ≤ 11 min is TARGET |
@@ -57,7 +57,7 @@ Status: **Phase 1 draft**.
 | R-B11b | Display: live location and status of all drones | [BRIEF §4] | `gcs/global_state` | GT-06 | REQUIRED |
 | R-B11c | Display: tagged survivor locations | [BRIEF §4] | `GcsDisplayModel.survivors` | GT-07 | OPEN (OQ-05l provisional tags) |
 | R-B11d | Display: kit delivery status per drone | [BRIEF §4] | `DeliveryEvent`, `gcs/views` | GT-08 | REQUIRED |
-| R-B11e | Display: progress and completion | [BRIEF §4] | `GcsDisplayModel.coverage_fraction`, `mission_phase` | GT-09 | REQUIRED |
+| R-B11e | Display: progress and completion | [BRIEF §4] | `GcsDisplayModel.coverage_fraction`, `GcsDisplayModel.mission_phase` | GT-09 | REQUIRED |
 | R-B11f | Display: live video | [BRIEF §4] | `VideoSource`, `video/decoder`, `gcs/services/video_service` | GT-11; VT series | OPEN (OQ-02, OQ-09) |
 | R-B12 | No external network; local RF only; no tethers | [BRIEF §5] | `link/radio` | CT-01: no socket to a non-local address in the runtime package (static check); HW-05 | REQUIRED |
 | R-B13 | ≤ 2 setup people; 1 operator | [BRIEF §6] | — (procedure) | HW-06 rehearsal | REQUIRED |
@@ -82,7 +82,7 @@ Status: **Phase 1 draft**.
 | R-P1-09 | Controller restricted to a certified grid | [P1 Eq. 32, Eq. 40, Prop. 17–18, Thm 4] | `video/control/controller`, `video/certificates/grid` | VT-13, VT-18; CT-12: output ∈ grid always | PROVED |
 | R-P1-10 | Decoder: Kalman side info, conditional mean, floor fallback | [P1 Lemma 3, Prop. 3, Prop. 9, Rem. 5] | `video/decoder` | VT-02, VT-03; CT-13 fallback on mismatch | PROVED (Gaussian model) |
 | R-P1-11 | Diversity L ≥ 4 exposed as a gate | [P1 Cor. 6] | `gcs/preflight`, `CertifiedFloorDesign.L` | VT-08; GT-13 gate refuses L < design L | SIMULATED; OPEN for our link (OQ-03) |
-| R-P1-12 | Latency T_g + τ_proc ≤ L_max | [P1 (L)] | `video/encoder`, `video/decoder` | timing test once L_max is set | OPEN (OQ-13) |
+| R-P1-12 | Latency T_g + τ_proc ≤ L_max | [P1 (L)] | `video/encoder`, `video/decoder` | VT-20 latency budget (needs L_max) | OPEN (OQ-13) |
 | R-P1-13 | Pilots and channel estimation | [P1 §C.1 Eq. 35, Table 18] | `video/pilots` | VT-15 | SIMULATED |
 | R-P1-14 | Quality accounting (T_eq, β_up, violation counter) | [P1 Def. 6, Prop. 10, Cor. 7] | `video/quality` | VT-19; GT-11 | PROVED (definitions) |
 | R-P1-15 | Fading and delayed-feedback channel simulator | [P1 Table 13 ph. 1–2, A7, §6.4] | `sim/channel` | CT-14 statistics (block gains Exp(1), AR(1) moments) | — (tool) |
@@ -97,14 +97,14 @@ Status: **Phase 1 draft**.
 | R-P2-04 | Ray-cast geotag with covariance; Low-Confidence re-observation | [P2 §4.3, Eq. 88–100] | `onboard/perception/geotag` | PT-04 known-pose geometry; covariance propagation vs Monte Carlo | PROVED (first order) / OPEN gate form (05k) |
 | R-P2-05 | Bayesian confirmation: prior 0.01, K = 10, multi-drone fusion, promote at P > 0.95 | [P2 §9.3, Eq. 258–265] | `swarm/confirmation` | PT-09 update arithmetic; MS-14 false-positive scenario | TARGET (calibration OQ-25) |
 | R-P2-06 | DWVT partition + Lloyd density | [P2 §5.1/§7.1, Eq. 157–168] | `swarm/dwvt` | PT-10 cells tile W; PT-11 smaller w → smaller cell | OPEN (weight law 05c′) |
-| R-P2-07 | BCD + Dubins coverage; spacing ≤ W_FOV(1 − overlap) | [P2 §5.2/§7.2, Eq. 169–175] | `onboard/planning/coverage_bcd`, `dubins` | PT-12 full coverage of a test polygon; PT-13 R_min formula | PROVED (geometry) |
+| R-P2-07 | BCD + Dubins coverage; spacing ≤ W_FOV(1 − overlap) | [P2 §5.2/§7.2, Eq. 169–175] | `onboard/planning/coverage_bcd`, `onboard/planning/dubins` | PT-12 full coverage of a test polygon; PT-13 R_min formula | PROVED (geometry) |
 | R-P2-08 | Boundary hysteresis and tanh speed damping | [P2 §5.4, Eq. 126–131] | `swarm/dwvt`, `onboard/planning` | PT-14 no chattering under injected noise | TARGET |
 | R-P2-09 | GCS min-cost assignment (Hungarian) | [P2 §5.3/§7.3, Eq. 176–187] | `swarm/auction/*`, `gcs/services/auction_service` | PT-15 vs brute force for N ≤ 4; PT-16 infeasible case reported (OQ-01) | PROVED (optimality) / OPEN cost form (05c) |
 | R-P2-10 | Min-snap B-spline QP with kinematic and terrain limits | [P2 §8.1/§10.1, Eq. 188–198] | `onboard/planning/minsnap` | PT-17 waypoint interpolation and limits | PROVED (QP) / TARGET timing |
 | R-P2-11 | NMPC 50 Hz, N_h = 20, RK4, SQP-RTI | [P2 §8.2/§10.2, Eq. 199–208] | `onboard/control/nmpc` | PT-18 tracking in sim; HW-07 timing on target (8–12 ms claim) | TARGET |
 | R-P2-12 | CBFs: inter-agent (d_safe 3 m), terrain, geofence | [P2 §8.3/§11.1, Eq. 209–226] | `onboard/control/cbf` | PT-06, PT-19 two-drone head-on | PROVED (conditional on feasibility) |
 | R-P2-13 | Payload-drop feedforward; terminal ≤ 0.5 m, ≤ 0.3 m/s; IBVS within 3 m | [P2 §8.4, §9.5, §12.2.2, Eq. 227–238, 272] | `onboard/payload`, `onboard/control` | PT-05, PT-08; HW-08 drop accuracy | TARGET (0.3 m) / OPEN (OQ-20) |
-| R-P2-14 | Lexicographic infeasibility handling + disturbance observer | [P2 §8.5, §9.4, §14.2] | `onboard/control/lexicographic`, `disturbance_observer` | PT-20 infeasible-QP injection → safe state | OPEN (priority 05j) |
+| R-P2-14 | Lexicographic infeasibility handling + disturbance observer | [P2 §8.5, §9.4, §14.2] | `onboard/control/lexicographic`, `onboard/control/disturbance_observer` | PT-20 infeasible-QP injection → safe state | OPEN (priority 05j) |
 | R-P2-15 | Hybrid automaton: low battery → RTH, comms loss → RTH | [P2 §9.1, §11.2, §14.1, Eq. 243–249] | `onboard/automaton` | MS-07, MS-08 | OPEN (05a, 05b) |
 | R-P2-16 | Degraded modes: LiDAR, GNSS, blind hover | [P2 §9.2, §13.2, Eq. 250–257] | `onboard/automaton`, `onboard/estimation/gates` | MS-15…MS-17 | OPEN (05d, 05e, 05g, OQ-19) |
 | R-P2-17 | Ghost buffer on stale neighbour state (> 200 ms) | [P2 §3.4, §6.4, §14.1] | `onboard/control/cbf` | PT-21 buffer grows with age | OPEN (05h) |
@@ -121,7 +121,7 @@ Status: **Phase 1 draft**.
 | ID | Practice | Source | Module | Test |
 |---|---|---|---|---|
 | R-M01 | Normalised contract + adapters; orchestrator never crashes | [ADIAT-inspired: `contracts.py`, `adapters.py`, `StreamAnalyzeService`] | `common/contracts/base` | CT-02 fault injection: bad item → `error_message`, pipeline continues |
-| R-M02 | Config-driven registry; unknown names fail loudly | [ADIAT-inspired: `algorithms.conf`] | `common/registry` | CT-03 |
+| R-M02 | Config-driven registry; unknown names fail loudly; registered classes match their interface | [ADIAT-inspired: `algorithms.conf`] | `common/registry` | CT-03, CT-08 |
 | R-M03 | Central logging with context | [ADIAT-inspired: `LoggerService`] | `common/logging` | CT-04 lint: no `print` in runtime packages |
 | R-M04 | Versioned, backward-compatible mission log | [ADIAT-inspired: result files] | `common/missionlog` | CT-05 read v1 with v2 reader |
 | R-M05 | Deterministic offline tests | [ADIAT-inspired: tests] [USER-PROMPT §9] | `tests/` | CT-06 seed audit; no network in the test environment |

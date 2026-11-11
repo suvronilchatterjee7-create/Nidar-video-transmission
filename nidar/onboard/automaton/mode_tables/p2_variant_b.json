@@ -1,0 +1,13 @@
+{
+  "name": "p2_variant_b",
+  "status": "CANDIDATE (OQ-05a) - not active",
+  "source": "P2 §13.1-§13.2, §14.1",
+  "modes": ["NOMINAL", "DEGRADED_LIDAR", "DEGRADED_GPS", "COMMS_LOSS", "EMERGENCY"],
+  "initial": "NOMINAL",
+  "transitions": [
+    {"from": "*", "to": "DEGRADED_LIDAR", "guard": "tr(P_pos) > eps_lidar (0.5 m^2 representative)", "source": "P2 §13.2.1", "open": ["OQ-05e", "OQ-05g", "OQ-19"]},
+    {"from": "*", "to": "DEGRADED_GPS", "guard": "D_M^2 > chi2(3, 0.999) = 16.27", "source": "P2 §13.2.2", "open": ["OQ-05d"]},
+    {"from": "*", "to": "COMMS_LOSS", "guard": "t_GCS > t_critical (5 s)", "source": "P2 §14.1", "open": ["OQ-05b"]},
+    {"from": "*", "to": "EMERGENCY", "guard": "tr(P_pos) > eps_critical AND GPS gated (P2 calls this EMERGENCY_HOVER)", "source": "P2 §13.2.3", "open": ["OQ-05a"]}
+  ]
+}

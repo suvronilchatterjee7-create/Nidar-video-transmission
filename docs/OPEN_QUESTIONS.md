@@ -202,9 +202,10 @@ Tag key: see [ARCHITECTURE.md §0](ARCHITECTURE.md#0-conventions).
   - altitude given as bands only
 - **Result:** calibration cannot be validated, and consecutive frames are correlated, which risks overconfidence. Recorded as RISK-S04 (Paper 2's Bayesian confirmation, Eq. 260, is unvalidated).
 
-### OQ-26 · Python toolchain — OPEN
-- **Machine:** 3.15 (default), 3.14, 3.11. numpy is installed; scipy is not installed.
-- **Proposal** ([USER-PROMPT §6.2] "do not install heavy dependencies without asking"): a project venv on 3.11 with numpy + scipy + pytest. Not installed yet. Needed before Phase 2 CI.
+### OQ-26 · Python toolchain — PROVISIONAL (used in Phase 2; change it if you prefer)
+- **Machine:** 3.15 (default), 3.14, 3.11.
+- **Phase 2 used the proposal:** a project `.venv` on Python 3.11.9 with numpy 1.26.4, pytest 8.3.3 and ruff 0.6.9 (lint), pinned in `pyproject.toml`.
+- **scipy is still not installed.** It will be requested at the start of Phase 3 ([USER-PROMPT §6.2]).
 
 ### OQ-27 · Who runs the auction — OPEN (minor)
 - **Sources:** [P2 §5.3, §7.3] says it is centralised at the GCS. [P2 §2.4] says "for a decentralized swarm architecture, distributed consensus-based auction algorithms may alternatively be employed".
@@ -235,7 +236,7 @@ Tag key: see [ARCHITECTURE.md §0](ARCHITECTURE.md#0-conventions).
 
 | Phase | Hard blockers | Soft (can stub with a named parameter) |
 |---|---|---|
-| Phase 2 (skeleton) | OQ-26 | all others |
+| Phase 2 (skeleton) | done; OQ-26 provisional | all others stubbed as named parameters |
 | Phase 3 (video reference + channel simulator) | none for reproducing paper tables | OQ-03, 11, 12, 13 needed to size for *our* link |
 | Mission simulator | OQ-01, 05a–c, 16, 17, 18, 21, 22 | 05d–m, 19, 20 |
 | Hardware / flight | OQ-03, 07, 10, 20, 29 | — |

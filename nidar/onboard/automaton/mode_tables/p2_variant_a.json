@@ -1,0 +1,16 @@
+{
+  "name": "p2_variant_a",
+  "status": "CANDIDATE (OQ-05a) - not active",
+  "source": "P2 §9.1 Eq. 243-249; P2 §11.2",
+  "modes": ["SEARCH", "DELIVER", "DEGRADED", "RTH", "EMERGENCY_LAND"],
+  "initial": "SEARCH",
+  "transitions": [
+    {"from": "*", "to": "RTH", "guard": "E_i(t) <= E_req(p_i) + E_margin", "source": "P2 Eq. 245-246", "open": []},
+    {"from": "*", "to": "RTH", "guard": "t_GCS > t_timeout", "source": "P2 Eq. 247-249", "open": ["OQ-05b"]},
+    {"from": "SEARCH", "to": "DELIVER", "guard": "assignment a_ij = 1 received", "source": "P2 Eq. 185", "open": []},
+    {"from": "DELIVER", "to": "SEARCH", "guard": "payload released, chi_search <- 1", "source": "P2 Eq. 187", "open": ["OQ-01"]},
+    {"from": "*", "to": "DEGRADED", "guard": "tr(P_pos) > eps_LiDAR", "source": "P2 Eq. 250-251", "open": ["OQ-05e", "OQ-05g"]},
+    {"from": "*", "to": "RTH", "guard": "operator EMERGENCY_RECALL", "source": "BRIEF §8", "open": ["OQ-16"]},
+    {"from": "*", "to": "EMERGENCY_LAND", "guard": "no input satisfies hard safety + actuator constraints", "source": "P2 §8.5", "open": ["OQ-05j"]}
+  ]
+}

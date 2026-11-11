@@ -1,6 +1,6 @@
-# Repository Layout (proposed)
+# Repository Layout
 
-Status: **Phase 1 proposal**. Nothing below is created until Phase 2 is approved [USER-PROMPT §8].
+Status: **Phase 2 skeleton created** on branch `phase2/skeleton` (see "Phase 2 status" at the end).
 
 **Starting point:** the tree you suggested [USER-PROMPT §6.2].
 **Adaptations**, each justified in the table further down:
@@ -85,6 +85,52 @@ NiDaR/
 | `onboard/automaton/mode_tables/` | Two incompatible Paper 2 mode sets. Table-driven, so the choice is data, not code | OQ-05a [ADIAT-inspired: config-driven] |
 | `gcs/controllers` + `views` + `services` split | UI wiring separated from logic | [ADIAT-inspired: CLAUDE.md §2.1] |
 | `tests/contracts/` | Same contract tests on the Python reference and the compiled implementation | [USER-PROMPT §6.2 "keep onboard real-time components behind interfaces"] |
+
+## Phase 2 status
+
+**Implemented, real code with tests:**
+
+| Area | Files | What works |
+|---|---|---|
+| Contracts | `nidar/common/contracts/{base,mission,state,perception,swarm,link,video,gcs,components}.py` | Every type in INTERFACES.md as a frozen dataclass or Protocol, with validation (shapes, ranges, unit quaternion, CCW polygon ≤ 10 ha, source-frame bbox, ResourcePlan sums, certified-design rule p̄ ≤ ε_core/2) |
+| Isolation | `run_isolated` in `contracts/base.py` | Failure becomes `error_message` naming component, operation and input; the pipeline continues |
+| Registry | `nidar/common/registry.py`, `registry.json` (26 components) | Loads, validates source tags and evidence levels, resolves by platform, fails loudly |
+| Logging | `nidar/common/logging.py` | Namespaced loggers; `ContextError` |
+| Mission log | `nidar/common/missionlog.py` | Versioned JSONL; migrations; refuses newer schemas; never overwrites |
+| Units | `nidar/common/units.py` | Brief and Paper 2 constants; quaternion and dB helpers |
+| Operator gate | `nidar/gcs/controllers/operator_actions.py` | Exactly 4 Brief actions, enabled by mission phase |
+| Mission loader | `nidar/gcs/mission_loader/` | Parser registry. No parser yet (OQ-22): fails cleanly, naming the file |
+| Mode tables | `nidar/onboard/automaton/` | Both Paper 2 variants load as candidates; no active table (OQ-05a) |
+| Gates | `tools/check.py`, `.github/workflows/ci.yml`, `pyproject.toml` | ruff lint (incl. no-print) + pytest |
+
+**Stubs:** 53 modules, every callable raising `NotYetImplemented` with its source equation:
+- `onboard/*`, `swarm/*`, `link/*`, `video/*`
+- `gcs/preflight.py`, `gcs/global_state.py`, `gcs/services/*`
+- `sim/*`
+- `tools/build_certified_grid.py`
+
+**Tests:** 244 pass. They cover:
+- contracts
+- isolation
+- registry ↔ interface conformance
+- mission log
+- operator gate
+- static rules: no network imports in runtime (CT-01), no `print` (CT-04), layering, display predictor not used by onboard (GT-14), and every module docstring carrying a source tag
+- **the traceability gate**
+
+**The traceability gate** (`tests/traceability/`) reads `docs/TRACEABILITY.md` and fails if any requirement:
+- has no resolvable module, or
+- has no test ID registered in `tests/test_index.json`
+
+It also fails if an "implemented" test ID points at a missing test.
+
+**Index status:** 92 test IDs in total. 9 are implemented; the others are planned with their phase.
+
+**Additions vs the tree above:**
+- `contracts/components.py`: the INTERFACES §9 protocols
+- `gcs/controllers/operator_actions.py`
+- `tests/test_index.json`
+- `tools/check.py`
 
 ## What is *not* in the repo
 - ADIAT source: patterns only, clean-room [USER-PROMPT §4].
