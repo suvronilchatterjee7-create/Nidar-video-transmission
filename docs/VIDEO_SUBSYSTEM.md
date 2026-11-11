@@ -341,6 +341,8 @@ How W is shared among drones is **not in any source** (OQ-11). The architecture 
 
 ## 11. Verification plan (Phase 3, only after approval) [USER-PROMPT §8 Phase 3]
 
+> **Phase 4 status:** the full pipeline is built; end-to-end results are in [VIDEO_PIPELINE.md](VIDEO_PIPELINE.md).
+>
 > **Phase 3 status:** VT-01 to VT-19 are implemented. Results, including what did **not** reproduce, are in [REPRODUCTION_P1.md](REPRODUCTION_P1.md). VT-20 waits for L_max (OQ-13).
 
 Each check re-implements the closed form from the PDF and compares with the **published** number. A mismatch is reported, never tuned away [USER-PROMPT §8].
@@ -367,6 +369,9 @@ Each check re-implements the closed form from the PDF and compares with the **pu
 | VT-18 | Controller | synthetic model k = 8e3, β = 0.66, starts at 6 and 14 dB | both reach ≈ 9.41 dB in 2 steps; s ≈ −0.52 | [P1 Eq. 40, Prop. 17, Table 20] |
 | VT-19 | Violation interval | T_g = 8/30 s | 26.7 s, 267 s, 2,667 s, 26,667 s | [P1 Cor. 7] |
 | VT-20 | Latency budget | measured T_g + τ_proc per GoP | ≤ L_max (value pending OQ-13) | [P1 (L)] |
+| VT-21 | H1 end to end | test video, AWGN 4–12 dB | full ≥ floor-only in every decoded GoP | [P1 §D.1 H1] |
+| VT-22 | H2 end to end | same | model within 1 dB of measured (paper 0.4 dB on its clip) | [P1 §D.1 H2] |
+| VT-23 | H5 vs zero-latency H.264 | testsrc2, 10 dB, ffmpeg/libx264 | H.264 + ideal code still wins (paper: −3.3…−3.5 dB) | [P1 §D.5 H5] |
 
 **Channel simulator (D9)** [P1 Table 13 phases 1–2]:
 - correlated Rayleigh blocks (L per GoP, correlation across GoPs)

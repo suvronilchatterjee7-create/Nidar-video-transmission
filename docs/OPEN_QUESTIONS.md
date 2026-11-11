@@ -34,6 +34,7 @@ Tag key: see [ARCHITECTURE.md §0](ARCHITECTURE.md#0-conventions).
 - **Interaction:** the Paper 1 refinement layer sends continuous-amplitude symbols, so it cannot travel as packets through Paper 2's bit-rate scheduler (see OQ-14).
 - **Architecture stance:** the GCS video panel reads decoded frames through a single `VideoSource` contract ([INTERFACES.md §7](INTERFACES.md#7-video-contracts)). The Paper 1 pipeline is designed in depth. The H.265 path is listed as a Paper 2 alternative and not designed.
 - **Blocks:** whether `video/` also needs an H.265 adapter. It also determines the radio choice (OQ-03, OQ-10).
+- **New evidence (Phase 4, docs/VIDEO_PIPELINE.md §6):** with ideal code and oracle rate, zero-latency H.264 beats our Paper 1 implementation by 7.5–11 dB (synthetic scene) and 18–27 dB (testsrc2). This is on low-entropy test content. The regime the paper argues for (fading without timely feedback) is still untested.
 
 ### OQ-03 · Radio / physical link — BLOCKED-ON-INPUT
 - **Sources:** [P2 §12.1] gives "900 MHz LoRa or 5.8 GHz digital" and an example B_RF = 2 Mbps. [P1 §6.4 Cor. 6] needs L ≥ 4 independent fading blocks per GoP (group of pictures). [P1 §C.2 Thm 3, Table 19] needs timely SNR feedback. [P1 Table 9] assumes W = 5 MHz at 10 dB.
@@ -189,7 +190,7 @@ Tag key: see [ARCHITECTURE.md §0](ARCHITECTURE.md#0-conventions).
   - Practical LDPC blocks are about 10⁴ bits [P1 §6.6].
 - **Decision needed:** which code family, given what the radio and compute support.
 
-### OQ-24 · Behaviour when the floor is infeasible — OPEN
+### OQ-24 · Behaviour when the floor is infeasible — OPEN (current behaviour: hold last picture + flag)
 - **Sources:** [P1 Table 23] reports "infeasible" at 2 and 4 dB, and with L ≤ 2 [P1 Table 9]. [P1 Table 13 phase 6] lists "analogue fallback below floor feasibility" as future work.
 - **Decision needed:** what the GCS shows and the drone sends when no certified design fits. Options: refinement-only, a "no guaranteed video" banner, or no video.
 
@@ -232,6 +233,31 @@ Tag key: see [ARCHITECTURE.md §0](ARCHITECTURE.md#0-conventions).
 ### OQ-31 · Live-video purpose vs detection — OPEN (confirm)
 - **Reading of the sources:** detection runs onboard on raw camera frames [P2 §2.1, §4.3]. The GCS video is for operator display [BRIEF §4]. So Paper 1 video quality does **not** gate survivor detection or scoring.
 - **Please confirm.** If GCS-side detection on the received video were wanted, D4 and D5 would be coupled and Paper 1's −3.3 dB result (RISK-V02) would become mission-critical.
+
+### OQ-32 · Mismatch detector for the floor fallback — OPEN
+- **Source:** [P1 Rem. 5] says the decoder "falls back to the floor reconstruction" if it *detects* mismatch, but not how.
+- **Implemented (Phase 4):** the normalised innovation of the analogue observations, the larger of "all active" and "side-information-using" coefficients.
+  - Clean video gives ≈ 1.0, so it is calibrated.
+  - The threshold (`mismatch_threshold`) has **no default**; tests use 3.0.
+- **Decision needed:** adopt this detector and pick the threshold, or choose another.
+
+### OQ-33 · Floor quantiser step and reconstruction — OPEN (interpretation in use)
+- **Source:** [P1 §5.2, A6] fixes the target D_i ≤ θ_F and the Gaussian test channel, but not the quantiser step.
+- **Implemented:** Δ²/12 = θ_F λ/(λ−θ_F), reconstruction (1−θ_F/λ)·Q(c). At high resolution this meets D ≈ θ_F (tested). A6 violations near λ ≈ θ_F are not yet counted.
+- **Alternative:** subtractive dither (IDEA-14).
+
+### OQ-34 · Metadata coding range and region count — OPEN (interpretation in use)
+- **Source:** [P1 §D.3] gives 1 dB / 1/32 steps and 12 + 5 bits per chunk, but not the dB range or how regions scale with frame size.
+- **Implemented:**
+  - code 0 = negligible
+  - codes 1..63 = −41…+21 dB on x/255 − ½ pixels
+  - regions scaled to the pilot's region size
+- **Status:** reproduces the paper's 36,360 bits at 640×352.
+
+### OQ-35 · GCS user-interface toolkit — OPEN
+- **What's blocked:** the GCS video panel widget, and the rest of the GCS view layer. The video service behind it is done.
+- **Constraints:** no web/cloud dependency [BRIEF §5]; single operator station [BRIEF §4].
+- **Decision needed:** which desktop toolkit (e.g. Qt/PySide6 as ADIAT uses, or another).
 
 ---
 

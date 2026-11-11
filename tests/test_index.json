@@ -34,20 +34,20 @@
    "node": "tests/unit/test_registry.py::test_ct08_registered_classes_match_interfaces"
   },
   "CT-10": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/video/test_pipeline_units.py::test_ct10_transform_orthonormal_and_distortion_invariant"
   },
   "CT-11": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/video/test_pipeline_units.py::test_ct11_pilot_layout_reproduces_paper_metadata_size"
   },
   "CT-12": {
    "status": "implemented",
    "node": "tests/paper1/test_channel_and_controller.py::test_ct12_controller_output_always_in_grid"
   },
   "CT-13": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/video/test_end_to_end.py::test_ct13_fallback_to_floor_on_mismatch"
   },
   "CT-14": {
    "status": "implemented",
@@ -94,8 +94,8 @@
    "phase": "GCS phase"
   },
   "GT-11": {
-   "status": "planned",
-   "phase": "GCS phase"
+   "status": "implemented",
+   "node": "tests/video/test_end_to_end.py::test_video_service_and_rgb"
   },
   "GT-12": {
    "status": "planned",
@@ -368,6 +368,18 @@
   "VT-20": {
    "status": "planned",
    "phase": "Phase 3 (video reference); value needs OQ-13"
+  },
+  "VT-21": {
+   "status": "implemented",
+   "node": "tests/video/test_end_to_end.py::test_h1_full_reconstruction_never_below_floor_only"
+  },
+  "VT-22": {
+   "status": "implemented",
+   "node": "tests/video/test_end_to_end.py::test_h2_model_predicts_measured_quality"
+  },
+  "VT-23": {
+   "status": "implemented",
+   "node": "tests/video/test_end_to_end.py::test_h5_digital_codec_still_wins_on_test_video"
   }
  }
 }

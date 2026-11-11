@@ -160,6 +160,25 @@ It also fails if an "implemented" test ID points at a missing test.
 
 These wait for the video-format and radio decisions (OQ-12, OQ-03/10, OQ-23).
 
+## Phase 4 status (branch `phase4/video-pipeline`)
+
+**The Paper 1 video link is now built end to end in software.** Results are in [VIDEO_PIPELINE.md](VIDEO_PIPELINE.md).
+
+| Area | Files |
+|---|---|
+| Video pipeline | `video/{transform, variance_field, config, gop_model, encoder, receiver}.py`; `video/floor/{quantiser, entropy, crc, code}.py`; `video/refinement/spreader.py` |
+| End-to-end simulation and test video | `sim/video/{end_to_end, test_video, h264_baseline}.py` (H.264 via the local ffmpeg) |
+| GCS video service | `gcs/services/video_service.py` |
+| Loopback radio | `link/radio.py` |
+
+**Tests:** `tests/video/` (CT-10, CT-11, CT-13, GT-11, VT-21..VT-23). 37 of the 95 test IDs are now implemented.
+
+**Still open by decision:**
+- the real floor code (OQ-23)
+- the SDR driver (OQ-03/10)
+- the GCS widget toolkit (OQ-35)
+- the remaining Phase 4 interpretations (OQ-32..34)
+
 ## What is *not* in the repo
 - ADIAT source: patterns only, clean-room [USER-PROMPT §4].
 - The dataset images or weights: they are referenced by path or URL to your NIDAR repo [DATASET]. They are not vendored, because of size (98 MB) and licence (OQ-08a).

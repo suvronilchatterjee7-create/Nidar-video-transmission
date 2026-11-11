@@ -31,8 +31,8 @@ def test_db_round_trip() -> None:
 
 
 @pytest.mark.parametrize("module, call", [
-    ("nidar.video.transform", lambda m: m.forward(np.zeros((8, 8, 8)), "haar", 8)),
-    ("nidar.video.floor.quantiser", lambda m: m.quantise(np.ones(3), 0.1)),
+    ("nidar.onboard.estimation.ndt", lambda m: m.match_scan(np.zeros((3, 3)), None, np.zeros(6))),
+    ("nidar.swarm.dwvt", lambda m: m.DwvtPartitioner().centroids(None)),
     ("nidar.swarm.auction.hungarian", lambda m: m.HungarianAuction().assign(np.zeros((1, 1)), [1], ["s"])),
     ("nidar.onboard.payload.hybrid_reset", lambda m: m.thrust_feedforward_delta(0.2)),
 ])

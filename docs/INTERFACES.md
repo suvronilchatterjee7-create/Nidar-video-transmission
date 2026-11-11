@@ -373,9 +373,12 @@ class VideoEncoder(Protocol):
                design: CertifiedFloorDesign) -> ProcessResult[tuple[FloorBlock, AnalogueBlock]]: ...
 
 class VideoDecoder(Protocol):
-    """GCS side. [P1 §5.1 D1-D5]"""
-    def decode(self, rx_symbols: np.ndarray, plan: ResourcePlan
-               ) -> ProcessResult[tuple[list[VideoFrame], VideoQualityReport]]: ...
+    """GCS side. [P1 §5.1 D1-D5]
+    Phase 4: the received unit is ``nidar.video.receiver.ReceivedGop`` (floor block, analogue uses, block
+    indices, pilots, noise variance) rather than a bare symbol array, because D1 needs the pilots and the
+    block structure. The result payload is a ``DecodedGop`` (frames, floor-only frames, report)."""
+    def decode(self, rx_symbols: "ReceivedGop", plan: ResourcePlan | None = None
+               ) -> ProcessResult["DecodedGop"]: ...
 
 class VideoSource(Protocol):
     """What the GCS video panel consumes. Neutral to OQ-02 (Paper 1 hybrid or P2 H.265)."""

@@ -68,6 +68,49 @@ def allocate(kappa: np.ndarray, vartheta: np.ndarray, nu: np.ndarray, power: flo
     return Allocation(x, p, d, xi, zeta, active)
 
 
+def allocate_grouped(kappa: np.ndarray, vartheta: np.ndarray, nu: np.ndarray, counts: np.ndarray, power: float,
+                     max_active: int | None = None) -> tuple[Allocation, np.ndarray]:
+    """Prop. 8 + Remark 6 for groups of ``counts`` identical components (one chunk = one group), exactly
+    equivalent to expanding them. Returns the per-group allocation and the number of active components per
+    group (the marginal group may be partly active)."""
+    kappa, vartheta, nu, counts = (np.asarray(v, dtype=float) for v in (kappa, vartheta, nu, counts))
+    if power <= 0:
+        z = np.zeros_like(kappa)
+        return Allocation(z, z, kappa.copy(), float("inf"), 0.0, z.astype(bool)), z
+
+    def at(xi: float) -> tuple[np.ndarray, np.ndarray, float]:
+        p = np.maximum(np.sqrt(nu * vartheta / xi) - nu * vartheta / kappa, 0.0)
+        n_act = np.where(p > 0, counts, 0.0)
+        zeta = 0.0
+        if max_active is not None and n_act.sum() > max_active:
+            s = component_saving(kappa, nu, vartheta, xi)
+            order = np.argsort(-s, kind="stable")
+            cum = np.cumsum(n_act[order])
+            keep = np.zeros_like(n_act)
+            prev = np.concatenate([[0.0], cum[:-1]])
+            take = np.clip(max_active - prev, 0.0, n_act[order])
+            keep[order] = take
+            excluded = order[take < n_act[order]]
+            zeta = float(s[excluded[0]]) if excluded.size else 0.0
+            n_act = keep
+        return p, n_act, zeta
+
+    hi = float((kappa**2 / (nu * vartheta)).max())
+    lo = hi * 1e-30
+    for _ in range(160):
+        mid = float(np.sqrt(lo * hi))
+        p, n_act, _ = at(mid)
+        lo, hi = (mid, hi) if (p * n_act).sum() > power else (lo, mid)
+    xi = float(np.sqrt(lo * hi))
+    p, n_act, zeta = at(xi)
+    total = (p * n_act).sum()
+    if total > 0:
+        p = p * (power / total)
+    x = np.where(n_act > 0, p / vartheta, 0.0)
+    d = 1.0 / (1.0 / kappa + x / nu)
+    return Allocation(x, p, d, xi, zeta, n_act > 0), n_act
+
+
 def allocate_with_estimation_error(kappa: np.ndarray, vartheta: np.ndarray, nu: np.ndarray, sigma2: np.ndarray,
                                    power: float) -> Allocation:
     """Prop. 16 [P1 Eq. 36]: u_i = [(1/z_i - nu_i) / sigma_i^2]^+,

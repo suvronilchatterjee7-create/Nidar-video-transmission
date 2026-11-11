@@ -3,16 +3,12 @@
 Notation follows Paper 1: mu_i side-information variance [P1 Lemma 3 Eq. 9], kappa_i posterior after the
 floor [Eq. 18], nu_i per-dimension noise, g_i analogue gain, theta_F floor water level.
 Steady state D_inf(eta) [P1 Prop. 3 Eq. 10]; conditional mean [P1 Prop. 9 Eq. 20].
-Full D1-D5 orchestration on real video (HybridDecoder) stays a stub: it needs the video format (OQ-12).
+The D1-D5 pipeline (``HybridDecoder``) lives in ``nidar.video.receiver`` so that this module stays free of
+pipeline imports (``gop_model`` depends on the closed forms here).
 """
 from __future__ import annotations
 
 import numpy as np
-
-from nidar.common.contracts import ProcessResult, ResourcePlan
-from nidar.common.stub import stub
-
-WAITS_FOR = "video format decisions (OQ-12) and a decoder-side motion search design"
 
 
 def kalman_steady_state(a: float | np.ndarray, omega: float | np.ndarray, eta: float | np.ndarray) -> np.ndarray:
@@ -59,10 +55,3 @@ def conditional_mean(z: np.ndarray, c_floor: np.ndarray, y: np.ndarray, g: np.nd
     floor_weight = np.where(in_f, 1.0 / theta_f, 0.0) + g * g / nu
     return d * (z / mu + floor_weight * np.where(in_f, c_floor, 0.0) + g * y / nu), d
 
-
-class HybridDecoder:
-    """Implements ``VideoDecoder``. Orchestration D1-D5 on real video is not built yet."""
-
-    def decode(self, rx_symbols: np.ndarray, plan: ResourcePlan) -> ProcessResult:
-        """[P1 §5.1 D1-D5]"""
-        raise stub("nidar/video/decoder.py:HybridDecoder.decode", "P1 §5.1 D1-D5", WAITS_FOR)

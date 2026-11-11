@@ -9,7 +9,7 @@ Status: **Phase 1 draft**.
 | ID | Risk | Evidence | L | I | Mitigation from the sources | Decision owner |
 |---|---|---|---|---|---|---|
 | RISK-V01 | **Our link may not provide L ≥ 4 independent fading blocks per GoP.** A low-altitude, line-of-sight, single-antenna, narrowband link may be close to static and flat, which makes the certified floor **infeasible** | [P1 Cor. 6, Table 9: L ≤ 2 infeasible; "a static, flat link provides none"] | 4 | 5 | Diversity from frequency selectivity, antennas or time variation within T_g [P1 §6.4]. Preflight gate P-1. Measure L on the real link (OQ-03) | you (hardware) |
-| RISK-V02 | **Paper 1 loses to H.264 in its own pilot**: −3.3 to −3.5 dB vs zero-latency, about −7 dB vs default preset; floor block 1.90× credited; η ≈ 0.66 | [P1 Table 23, §D.5 H5, Table 11] | 5 (measured) | 3: video is display-only (OQ-31); 5 if GCS detection on video were ever needed | Follow strictly per your decision (OQ-04). Paper's own roadmap: decoder-side MC (≥ 1 dB), parametric metadata (≤ 3 %), context-adaptive floor (≤ 1.3×) [P1 Table 13], none designed by the paper | you (OQ-04 answered) |
+| RISK-V02 | **Paper 1 loses to H.264 in its own pilot**: −3.3 to −3.5 dB vs zero-latency, about −7 dB vs default preset; floor block 1.90× credited; η ≈ 0.66. **Phase 4: −7.5 to −27 dB on our synthetic test videos** | [P1 Table 23, §D.5 H5, Table 11]; docs/VIDEO_PIPELINE.md §6 | 5 (measured) | 3: video is display-only (OQ-31); 5 if GCS detection on video were ever needed | Follow strictly per your decision (OQ-04). Paper's own roadmap: decoder-side MC (≥ 1 dB), parametric metadata (≤ 3 %), context-adaptive floor (≤ 1.3×) [P1 Table 13], none designed by the paper | you (OQ-04 answered) |
 | RISK-V03 | **SNR feedback absent or late.** Margin rises from 3.2 dB (d = 0) to 6.1 dB (d = 1) to 11.2 dB (none); no feedback is infeasible at 10 dB nominal | [P1 Table 19, Thm 3] | 3 | 5 | SNR report every GoP on the highest-priority telemetry class (VIDEO §7). Measure ρ, σ_s, σ_m | you (OQ-03, OQ-14) |
 | RISK-V04 | **Floor certificate omits clipping and channel-estimation error** | [P1 §B.1, §C.1, §8] | 5 (known gap) | 3 | Shown as a caveat in `CertifiedFloorDesign.includes_*`. Extension is paper roadmap phase 6 [P1 Table 13], not designed | you (Phase 3 scope) |
 | RISK-V05 | **A8 (certificate monotone in SNR) not proved**; checked at one point | [P1 §C.2] | 2 | 4 | Re-check on our grid in Phase 3 | — |
@@ -19,6 +19,8 @@ Status: **Phase 1 draft**.
 | RISK-V09 | **Floor code practicality.** Long codes needed; 10⁴-bit LDPC blocks mean segmentation (about 10× overhead) unless rateless | [P1 Prop. 13, §6.6] | 3 | 3 | Monolithic or rateless code (OQ-23) | you |
 | RISK-V10 | **Latency.** At least T_g (267–320 ms at G = 8) plus processing before a GoP can be sent; L_max undefined | [P1 (L), Table 21] | 3 | 2 | G vs overhead trade [P1 Prop. 12]; set L_max (OQ-13) | you |
 | RISK-V11 | **Encoder complexity unmeasured** on embedded hardware | [P1 §8] | 3 | 3 | Paper roadmap phase 7 (SDR bench, ops per sample vs H.264) [P1 Table 13] | — |
+| RISK-V12 | **Not real time in Python:** about 1.1 s to encode + decode a 0.32 s GoP at 288×352 | docs/VIDEO_PIPELINE.md §5 | 5 (measured) | 4 | Compiled implementation behind the same contracts (ARCHITECTURE §10) | you (language/hardware) |
+| RISK-V13 | **Decoder-side motion compensation gives no gain** as designed | docs/VIDEO_PIPELINE.md §4 | 5 (measured) | 2 | IDEA-13 (needs your decision) | you |
 
 ## Swarm, mission and platform (Paper 2 and Brief)
 

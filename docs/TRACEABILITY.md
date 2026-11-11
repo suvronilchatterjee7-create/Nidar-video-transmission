@@ -33,7 +33,7 @@ Status: **Phase 1 draft**.
 | D2 Single GCS, display set, 4 actions | R-B05, R-B07, R-B10, R-B11a–f, R-P2-19, R-P2-20 |
 | D3 Autonomous coverage, allocation, drop, return ≤ 30 min | R-B06, R-B09, R-B18, R-P2-06…R-P2-10, R-P2-13, R-P2-22, R-P2-24 |
 | D4 Detection, 3-D geotag with covariance, Bayesian confirmation | R-P2-04, R-P2-05, R-P2-03 |
-| D5 Paper 1 video | R-P1-01…R-P1-12 |
+| D5 Paper 1 video | R-P1-01…R-P1-16 |
 | D6 Local-only comms, degradation, priority mux | R-B12, R-P2-17, R-P2-18, R-P1-08 |
 | D7 Failsafes and modes | R-B16, R-B17, R-B14, R-B15, R-P2-14, R-P2-15, R-P2-16 |
 | D8 5-minute setup pipeline | R-B05, R-B13, R-P2-21 |
@@ -59,7 +59,7 @@ Status: **Phase 1 draft**.
 | R-B11c | Display: tagged survivor locations | [BRIEF §4] | `GcsDisplayModel.survivors` | GT-07 | OPEN (OQ-05l provisional tags) |
 | R-B11d | Display: kit delivery status per drone | [BRIEF §4] | `DeliveryEvent`, `gcs/views` | GT-08 | REQUIRED |
 | R-B11e | Display: progress and completion | [BRIEF §4] | `GcsDisplayModel.coverage_fraction`, `GcsDisplayModel.mission_phase` | GT-09 | REQUIRED |
-| R-B11f | Display: live video | [BRIEF §4] | `VideoSource`, `video/decoder`, `gcs/services/video_service` | GT-11; VT series | OPEN (OQ-02, OQ-09) |
+| R-B11f | Display: live video | [BRIEF §4] | `VideoSource`, `video/receiver`, `gcs/services/video_service` | GT-11; VT series | OPEN (OQ-02, OQ-09, OQ-35 widget); service implemented |
 | R-B12 | No external network; local RF only; no tethers | [BRIEF §5] | `link/radio` | CT-01: no socket to a non-local address in the runtime package (static check); HW-05 | REQUIRED |
 | R-B13 | ≤ 2 setup people; 1 operator | [BRIEF §6] | — (procedure) | HW-06 rehearsal | REQUIRED |
 | R-B14 | Launch and land inside the 12 ft pad; nothing outside | [BRIEF §7] | `onboard/planning` terminal constraint, `gcs/preflight` | MS-05 landing inside Z; PT-08 terminal constraint | OPEN (OQ-18) |
@@ -74,8 +74,8 @@ Status: **Phase 1 draft**.
 |---|---|---|---|---|---|
 | R-P1-01 | Chance-constrained floor P[T_eq < T_min] ≤ ε_F per GoP | [P1 Problem 2 (F), Thm 2] | `video/floor/*`, `video/certificates/*` | VT-06, VT-07, VT-08; channel-sim outage count | PROVED (A1–A6); certificate numbers REPRODUCED (Tables 7–10, ≤1.2 %; L≤2 ideal cells −0.4/−0.9 %) |
 | R-P1-02 | Ceiling tracking up to 10 Mbps-eq | [P1 Problem 2 (R)] | `video/refinement/*`, `video/control/controller` | VT-13, VT-18 | SIMULATED (η ≈ 0.66, one clip); synthetic sweep NOT REPRODUCED in level (structure only) |
-| R-P1-03 | Orthonormal spatio-temporal transform, no encoder motion search | [P1 Def. 4, Lemma 2] | `video/transform` | CT-10 orthonormality, distortion invariance | PROVED |
-| R-P1-04 | Variance field and protected metadata | [P1 A3, A5, §D.3, Lemma 9] | `video/variance_field` | CT-11 quantisation round-trip; size vs 36,360-bit pilot figure | SIMULATED |
+| R-P1-03 | Orthonormal spatio-temporal transform, no encoder motion search | [P1 Def. 4, Lemma 2] | `video/transform` | CT-10 orthonormality, distortion invariance | PROVED; implemented and tested (Phase 4) |
+| R-P1-04 | Variance field and protected metadata | [P1 A3, A5, §D.3, Lemma 9] | `video/variance_field` | CT-11 quantisation round-trip; size vs 36,360-bit pilot figure | REPRODUCED (2,880 chunks, 36,360 bits) |
 | R-P1-05 | Firewalled floor, sized by water level and Eq. 16–17 | [P1 Def. 7, Prop. 6–7] | `video/floor/designer` | VT-01 | PROVED; Table 5 REPRODUCED exactly |
 | R-P1-06 | Certified finite-blocklength floor block | [P1 Thm 1, Prop. 11–12, Rem. 7–8] | `video/certificates/*`, `tools/build_certified_grid` | VT-05, VT-06, VT-07 | PROVED (i.i.d., Rayleigh, perfect CSI); Tables 7–8 REPRODUCED |
 | R-P1-07 | Refinement allocation with side information, estimation error, limiter | [P1 Prop. 8, Prop. 16, Lemma 6, Rem. 6] | `video/refinement/*` | VT-03, VT-04, VT-12, VT-16, VT-14 | PROVED; Table 15 REPRODUCED exactly; Table 17 bound verified (instances unstated) |
@@ -83,10 +83,11 @@ Status: **Phase 1 draft**.
 | R-P1-09 | Controller restricted to a certified grid | [P1 Eq. 32, Eq. 40, Prop. 17–18, Thm 4] | `video/control/controller`, `video/certificates/grid` | VT-13, VT-18; CT-12: output ∈ grid always | PROVED; grid membership tested; controller dynamics REPRODUCED, fixed point 9.0 vs 9.41 dB NOT |
 | R-P1-10 | Decoder: Kalman side info, conditional mean, floor fallback | [P1 Lemma 3, Prop. 3, Prop. 9, Rem. 5] | `video/decoder` | VT-02, VT-03; CT-13 fallback on mismatch | PROVED (Gaussian model); Eq. 10, 18, 20 REPRODUCED; orchestration OPEN (OQ-12) |
 | R-P1-11 | Diversity L ≥ 4 exposed as a gate | [P1 Cor. 6] | `gcs/preflight`, `CertifiedFloorDesign.L` | VT-08; GT-13 gate refuses L < design L | SIMULATED; OPEN for our link (OQ-03) |
-| R-P1-12 | Latency T_g + τ_proc ≤ L_max | [P1 (L)] | `video/encoder`, `video/decoder` | VT-20 latency budget (needs L_max) | OPEN (OQ-13) |
+| R-P1-12 | Latency T_g + τ_proc ≤ L_max | [P1 (L)] | `video/encoder`, `video/receiver` | VT-20 latency budget (needs L_max) | OPEN (OQ-13); measured ≈1.1 s per 0.32 s GoP in Python (not real time) |
 | R-P1-13 | Pilots and channel estimation | [P1 §C.1 Eq. 35, Table 18] | `video/pilots` | VT-15 | REPRODUCED (Table 18: all pilot counts, rates ±0.003) |
 | R-P1-14 | Quality accounting (T_eq, β_up, violation counter) | [P1 Def. 6, Prop. 10, Cor. 7] | `video/quality` | VT-19; GT-11 | PROVED (definitions); Cor. 7 REPRODUCED |
 | R-P1-15 | Fading and delayed-feedback channel simulator | [P1 Table 13 ph. 1–2, A7, §6.4] | `sim/channel` | CT-14 statistics (block gains Exp(1), AR(1) moments) | — (tool, implemented Phase 3) |
+| R-P1-16 | End-to-end link: floor holds when decoded (H1), model predicts quality (H2), comparison with a digital codec (H5) | [P1 §D.1, §D.5] | `sim/video/end_to_end`, `video/receiver`, `video/encoder` | VT-21 H1, VT-22 H2, VT-23 H5 | SIMULATED by us on test video: H1 ✅, H2 ✅ (≤0.61 dB), H5 not supported (−7.5…−27 dB) |
 
 ## 4. Paper 2 requirements (swarm, mission)
 
