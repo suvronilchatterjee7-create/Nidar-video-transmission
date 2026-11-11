@@ -1,0 +1,92 @@
+# Repository Layout (proposed)
+
+Status: **Phase 1 proposal**. Nothing below is created until Phase 2 is approved [USER-PROMPT §8].
+
+**Starting point:** the tree you suggested [USER-PROMPT §6.2].
+**Adaptations**, each justified in the table further down:
+- `swarm/` is split from `onboard/` along the GCS vs drone line.
+- `video/` is split into encoder / decoder / certificates.
+- `tools/` is added for offline certificate-grid generation.
+
+```
+NiDaR/
+├── NIDAR_claude_code_prompt.md        # your brief to me (kept at root, unchanged)
+├── docs/
+│   ├── sources/                        # the 3 source PDFs (copies)  [USER-PROMPT §10]
+│   ├── ARCHITECTURE.md  VIDEO_SUBSYSTEM.md  INTERFACES.md  TRACEABILITY.md
+│   ├── REPO_LAYOUT.md  RISK_REGISTER.md  OPEN_QUESTIONS.md  IDEAS_PENDING.md
+├── nidar/
+│   ├── common/
+│   │   ├── contracts/                  # INTERFACES.md as code: base, mission, state, perception, swarm, link, video, gcs
+│   │   ├── units.py                    # SI helpers, frames, quaternion utils
+│   │   ├── registry.py + registry.json # name -> module/class/platforms/sources   [ADIAT-inspired: algorithms.conf]
+│   │   ├── logging.py                  # central logger, contextual errors   [ADIAT-inspired: LoggerService]
+│   │   └── missionlog.py               # versioned, append-only mission log   [ADIAT-inspired: versioned results]
+│   ├── onboard/                        # runs on each drone   [P2 §1-§14]
+│   │   ├── estimation/                 # eskf.py, ndt.py, gates.py (OQ-05d)
+│   │   ├── mapping/                    # tsdf.py
+│   │   ├── perception/                 # detector.py (adapter over YOLOv8-pose), geotag.py
+│   │   ├── planning/                   # coverage_bcd.py, dubins.py, minsnap.py, safe_corridor.py
+│   │   ├── control/                    # nmpc.py (interface + acados binding), cbf.py, lexicographic.py, disturbance_observer.py
+│   │   ├── automaton/                  # table-driven SHA; mode_tables/ holds both P2 variants (OQ-05a)
+│   │   └── payload/                    # release.py, hybrid_reset.py   [P2 §8.4, §9.5]
+│   ├── swarm/                          # multi-agent logic   [P2 §5, §7, §9.3]
+│   │   ├── dwvt.py                     # weighted Voronoi + Lloyd + hysteresis (GCS)
+│   │   ├── auction/                    # cost.py (both forms, OQ-05c), hungarian.py (GCS)
+│   │   └── confirmation.py             # Bayesian belief grid + fusion (onboard)
+│   ├── link/                           # [BRIEF §5] [P2 §12.1] [P1 §3.1]
+│   │   ├── radio.py                    # Radio protocol + loopback/sim radio
+│   │   ├── framing.py                  # telemetry messages, seq/ack, heartbeat
+│   │   ├── resource_plan.py            # per-GoP channel-use split (telemetry slice: OQ-14)
+│   │   └── priority_mux.py             # P2 state > map > video ordering (rates: OQ-15)
+│   ├── video/                          # Paper 1   [P1]
+│   │   ├── transform.py                # Def. 4
+│   │   ├── variance_field.py           # A3, §D.3, Lemma 9
+│   │   ├── floor/                      # designer.py (Def. 7), quantiser.py, entropy.py, crc.py
+│   │   ├── certificates/               # info_density.py (Eq. 22-24), dt_bound.py (Eq. 25, Thm 1),
+│   │   │                               # kl_certificate.py (Prop. 11), sizing.py (Eq. 26-27),
+│   │   │                               # outage.py (Rayleigh L-block quantiles), grid.py (Prop. 18)
+│   │   ├── refinement/                 # allocator.py (Prop. 8/16, Lemma 7), limiter.py (Lemma 6), spreader.py
+│   │   ├── pilots.py                   # Eq. 35
+│   │   ├── control/                    # snr_predictor.py (Lemma 8, Thm 3), controller.py (Eq. 32, 40)
+│   │   ├── encoder.py                  # E1-E7 orchestration
+│   │   ├── decoder.py                  # D1-D5, Kalman bank (Lemma 3, Prop. 3), cond. mean (Prop. 9), fallback
+│   │   └── quality.py                  # T_eq (Def. 6), beta_up (Prop. 10), violation counter (Cor. 7)
+│   └── gcs/                            # single operator station   [BRIEF §4]
+│       ├── mission_loader/             # parser registry (OQ-22)
+│       ├── preflight.py                # gate table   [P2 §12.4]
+│       ├── global_state.py             # N x 13 matrix + display predictor   [P2 §12.1, §14.3]
+│       ├── services/                   # partition_service.py, auction_service.py, video_service.py
+│       ├── controllers/                # UI wiring only   [ADIAT-inspired: layering]
+│       └── views/                      # UI; generated files never hand-edited
+├── sim/                                # offline only
+│   ├── channel/                        # block Rayleigh, AR(1) SNR, delayed/noisy reports   [P1 Table 13 ph. 1-2, A7]
+│   ├── mission/                        # kinematic multi-drone sim driving onboard/ + gcs/ via contracts
+│   └── scenarios/                      # boundary files, survivor placements, seeds
+├── tools/
+│   └── build_certified_grid.py         # offline Prop. 11 sampling -> versioned grid artefact
+├── tests/
+│   ├── unit/                           # per module
+│   ├── paper1/                         # VT-01 … VT-19   (VIDEO_SUBSYSTEM.md §11)
+│   ├── paper2/                         # closed-form checks, e.g. Eq. 155 (1.962 N), Eq. 174, Eq. 230 (0.427 m/s^2)
+│   ├── contracts/                      # same tests run on Python reference and compiled implementations
+│   └── traceability/                   # fails if a requirement lacks module or test   [USER-PROMPT §8 Phase 2]
+├── pyproject.toml                      # deps pinned; toolchain OQ-26
+└── .gitignore
+```
+
+## Justification of the deviations
+
+| Change vs suggested tree | Why | Tag |
+|---|---|---|
+| `swarm/` holds both GCS-run code (DWVT, auction) and onboard code (confirmation) | Paper 2 places DWVT and the auction at the GCS and confirmation onboard; keeping the *algorithms* together stops them drifting apart. Deployment is chosen by registry `platforms` | [P2 §5.3, §7.1, §9.3] [ADIAT-inspired: registry platforms] |
+| `video/certificates/` as its own package | The certificate is the safety argument [P1 Thm 1–4]. It must be testable on its own and reused offline by `tools/` | [P1 Prop. 11, Prop. 18] |
+| `tools/build_certified_grid.py` | The grid is computed offline. Runtime only *loads* it, so runtime safety does not depend on runtime sampling | [P1 Prop. 18] |
+| `onboard/automaton/mode_tables/` | Two incompatible Paper 2 mode sets. Table-driven, so the choice is data, not code | OQ-05a [ADIAT-inspired: config-driven] |
+| `gcs/controllers` + `views` + `services` split | UI wiring separated from logic | [ADIAT-inspired: CLAUDE.md §2.1] |
+| `tests/contracts/` | Same contract tests on the Python reference and the compiled implementation | [USER-PROMPT §6.2 "keep onboard real-time components behind interfaces"] |
+
+## What is *not* in the repo
+- ADIAT source: patterns only, clean-room [USER-PROMPT §4].
+- The dataset images or weights: they are referenced by path or URL to your NIDAR repo [DATASET]. They are not vendored, because of size (98 MB) and licence (OQ-08a).
+- Any cloud, deployment or website code: there is no runtime network [BRIEF §5].
