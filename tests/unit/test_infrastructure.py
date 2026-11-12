@@ -32,9 +32,9 @@ def test_db_round_trip() -> None:
 
 @pytest.mark.parametrize("module, call", [
     ("nidar.onboard.estimation.ndt", lambda m: m.match_scan(np.zeros((3, 3)), None, np.zeros(6))),
-    ("nidar.swarm.dwvt", lambda m: m.DwvtPartitioner().centroids(None)),
-    ("nidar.swarm.auction.hungarian", lambda m: m.HungarianAuction().assign(np.zeros((1, 1)), [1], ["s"])),
-    ("nidar.onboard.payload.hybrid_reset", lambda m: m.thrust_feedforward_delta(0.2)),
+    ("nidar.onboard.planning.dubins", lambda m: m.turn(np.zeros(2), 0.0, np.ones(2), 0.0, 5.0)),
+    ("nidar.onboard.control.nmpc", lambda m: m.NmpcController().on_payload_release(0.2, np.zeros(3), np.zeros(3))),
+    ("nidar.onboard.estimation.eskf", lambda m: m.EskfEstimator().state()),
 ])
 def test_stubs_raise_not_yet_implemented_with_source(module, call) -> None:
     with pytest.raises(NotYetImplemented) as info:

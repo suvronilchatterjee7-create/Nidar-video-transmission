@@ -38,6 +38,8 @@ Status: **Phase 1 draft**.
 | RISK-S10 | **5-minute setup** relies on 60 s boot and mesh formation, unmeasured | [P2 §12.4] | 3 | 4 | Parallel preflight state machine [P2 §12.4]; rehearse | — |
 | RISK-S11 | **Coverage time unknown** without camera and altitude figures; P2's 11 min is a target | [P2 §12.2.3] | 3 | 4 | Bound T ≥ A/(N·W_FOV·v_sweep) once OQ-21 is answered | you |
 | RISK-S12 | **Unverified rule citations** in Paper 2 (8.x, Annexures, 25 marks) could mislead priorities | [P2 §2.1, §12, §13, §15] | 3 | 2 | Treated as unverified (OQ-06) | — |
+| RISK-S13 | **Mission plan puts drones on crossing paths**: delivery transits cross other drones' sweeps at the same altitude, so the 3 m separation [P2 Eq. 216] depends entirely on the CBF layer, which is not built yet | docs/MISSION_SIM.md §4 (closest approach 0–0.6 m in kinematic runs) | 4 | 5 | Inter-agent CBF [P2 §8.3]; IDEA-16 | you |
+| RISK-S14 | **Decoys pass the confirmation rule**: an object scored 0.7 on every frame is confirmed and receives a kit, because Paper 2 treats consecutive frames as independent | docs/MISSION_SIM.md §4, MS-14 | 3 | 4 | IDEA-07 (calibration), IDEA-09 (correlated evidence) | you |
 
 ## Licensing and process
 

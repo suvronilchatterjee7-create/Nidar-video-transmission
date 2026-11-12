@@ -10,6 +10,7 @@ Start with the [main README](../README.md). Then read these in order:
 | 4 | [TRACEABILITY.md](TRACEABILITY.md) | Requirement → source → module → test → evidence level |
 | 5 | [REPRODUCTION_P1.md](REPRODUCTION_P1.md) | Which of Paper 1's published numbers our code reproduces |
 | 6 | [VIDEO_PIPELINE.md](VIDEO_PIPELINE.md) | The built video link: choices, results, latency, H.264 comparison |
+| 6b | [MISSION_SIM.md](MISSION_SIM.md) | Swarm logic and the mission simulator: what is built, results, findings |
 | 7 | [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) | 35 decisions the sources leave open or contradict |
 | 8 | [RISK_REGISTER.md](RISK_REGISTER.md) | Risks, with evidence and mitigations from the sources |
 | 9 | [IDEAS_PENDING.md](IDEAS_PENDING.md) | Ideas **not** adopted until the team decides |

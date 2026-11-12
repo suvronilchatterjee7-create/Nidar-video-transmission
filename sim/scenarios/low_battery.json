@@ -1,0 +1,6 @@
+{
+  "_base": "baseline_p2.json",
+  "_about": "Short endurance (330 s): the low-battery guard sends drones home before the area is finished [P2 Eq. 245-246].",
+  "name": "low_battery",
+  "endurance_s": 330.0
+}

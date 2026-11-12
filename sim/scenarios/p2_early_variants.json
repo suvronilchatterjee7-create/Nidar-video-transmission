@@ -1,0 +1,18 @@
+{
+  "_base": "baseline_p2.json",
+  "_about": "Paper 2's earlier-section variants (OQ-05): cost Eq. 38, multiplicative weight law Eq. 29-30, GCS timeout 3 s (Eq. 248).",
+  "name": "p2_early_variants",
+  "cost_form": "eq38",
+  "cost_weights": {
+    "alpha": 1.0,
+    "beta": 5.0,
+    "gamma": 0.0
+  },
+  "weight_law": "multiplicative",
+  "weight_params": {
+    "eta": 0.5,
+    "w_min": 0.05,
+    "low_battery_frac": 0.3
+  },
+  "gcs_timeout_s": 3.0
+}

@@ -1,0 +1,6 @@
+{
+  "_base": "baseline_p2.json",
+  "_about": "Brief minimum fleet: 2 drones [BRIEF \u00a71].",
+  "name": "two_drones",
+  "n_drones": 2
+}

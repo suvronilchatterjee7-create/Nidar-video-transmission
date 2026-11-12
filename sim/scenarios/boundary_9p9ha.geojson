@@ -1,0 +1,12 @@
+{
+  "type": "FeatureCollection",
+  "units": "metres",
+  "_comment": "Test boundary in local metres (9.88 ha, convex pentagon). Not the organisers' file (OQ-22).",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"role": "boundary"},
+      "geometry": {"type": "Polygon", "coordinates": [[[0, 0], [400, 0], [420, 150], [250, 280], [0, 230], [0, 0]]]}
+    }
+  ]
+}

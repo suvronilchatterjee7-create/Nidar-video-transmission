@@ -1,0 +1,14 @@
+{
+  "_base": "baseline_p2.json",
+  "_about": "A dummy-like object the detector scores at 0.7 every frame. Paper 2's update treats frames as independent, so it can be confirmed as a survivor (OQ-25, RISK-S04).",
+  "name": "decoy_debris",
+  "decoys": [
+    {
+      "xy": [
+        200,
+        100
+      ],
+      "confidence": 0.7
+    }
+  ]
+}

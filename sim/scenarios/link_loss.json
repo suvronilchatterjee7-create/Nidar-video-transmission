@@ -1,0 +1,12 @@
+{
+  "_base": "baseline_p2.json",
+  "_about": "Drone 2 loses the GCS link 150-400 s: after the timeout it returns home on its own [P2 Eq. 247-249]; the others re-partition its area.",
+  "name": "link_loss",
+  "link_outages": [
+    {
+      "drone": 2,
+      "t0": 150.0,
+      "t1": 400.0
+    }
+  ]
+}

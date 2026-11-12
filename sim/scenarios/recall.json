@@ -1,0 +1,11 @@
+{
+  "_base": "baseline_p2.json",
+  "_about": "Operator EMERGENCY_RECALL at 200 s: every drone returns and lands on the pad (OQ-16 decision).",
+  "name": "recall",
+  "operator_events": [
+    {
+      "t": 200.0,
+      "action": "emergency_recall"
+    }
+  ]
+}

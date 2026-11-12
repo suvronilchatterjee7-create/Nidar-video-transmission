@@ -178,6 +178,25 @@ These wait for the video-format and radio decisions (OQ-12, OQ-03/10, OQ-23).
 - the GCS widget toolkit (OQ-35)
 - the remaining Phase 4 interpretations (OQ-32..34)
 
+## Phase 5 status (branch `phase5/mission-sim`)
+
+**The swarm and GCS mission logic now run in a kinematic multi-drone mission simulator.** Results are in [MISSION_SIM.md](MISSION_SIM.md).
+
+| Area | Files |
+|---|---|
+| Swarm | `swarm/dwvt.py`, `swarm/confirmation.py`, `swarm/auction/{cost, hungarian}.py` |
+| Onboard (pure logic) | `onboard/planning/{coverage_bcd, dubins}.py`, `onboard/payload/hybrid_reset.py`, `onboard/automaton/guards.py` |
+| Link | `link/{priority_mux, resource_plan}.py` |
+| GCS | `gcs/mission_loader/geojson.py`, `gcs/preflight.py`, `gcs/global_state.py`, `gcs/services/{partition, auction}_service.py` |
+| Simulation | `sim/mission/kinematic.py`, `sim/scenarios/*.json` (10 scenarios + GeoJSON boundary) |
+| Tools | `tools/run_mission.py` |
+
+**Tests:** `tests/mission/`. 65 of the 95 test IDs are now implemented; 530 fast tests pass.
+
+**Decided by the team (2026-11-12):** OQ-01 (kits per drone is a setting), OQ-05 (all variants selectable, later sections as baseline), OQ-16 (recall = pad, abort = land in place), OQ-22 (GeoJSON).
+
+**Still stubs:** estimator, NDT, TSDF, detector, geotagger, min-snap, NMPC, CBFs, lexicographic fallback, disturbance observer, payload release driver, mode-table automaton, safe corridor, framing.
+
 ## What is *not* in the repo
 - ADIAT source: patterns only, clean-room [TEAM-BRIEF §4].
 - The dataset images or weights: they are referenced by path or URL to your NIDAR repo [DATASET]. They are not vendored, because of size (98 MB) and licence (OQ-08a).

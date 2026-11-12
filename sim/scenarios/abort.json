@@ -1,0 +1,11 @@
+{
+  "_base": "baseline_p2.json",
+  "_about": "Operator SAFETY_ABORT at 200 s: every drone lands where it is (OQ-16 decision; off-pad landing allowed for safety [BRIEF \u00a77]).",
+  "name": "abort",
+  "operator_events": [
+    {
+      "t": 200.0,
+      "action": "safety_abort"
+    }
+  ]
+}

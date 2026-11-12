@@ -4,7 +4,8 @@
 
 This repository holds:
 - the **architecture** of our collaborative multi-drone search-and-rescue system;
-- a **working software implementation** (in simulation) of its **live-video transmission link**.
+- a **working software implementation** (in simulation) of its **live-video transmission link**;
+- the **mission logic** (area division, survivor confirmation, survivor auction, coverage, failsafes) running in a **multi-drone mission simulator**.
 
 Every design decision is traced to one of three source documents:
 - the **Mission Brief** (the competition rules);
@@ -13,7 +14,7 @@ Every design decision is traced to one of three source documents:
 
 Every claim is labelled with how strong its evidence is.
 
-> **Status in one sentence.** The architecture is fully documented. The video link is built and tested end to end **in simulation**. The rest of the drone system (flight control, perception, swarm logic, most of the ground station) is **designed but not yet implemented**, and much of it waits on team decisions listed in [docs/OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md).
+> **Status in one sentence.** The architecture is fully documented. The video link and the mission logic are built and tested **in simulation**. Flight control, perception and the ground-station screens are **designed but not yet implemented**, and they wait on hardware and team decisions listed in [docs/OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md).
 
 ---
 
@@ -83,16 +84,16 @@ Every claim is labelled with how strong its evidence is.
 |---|---|
 | **Architecture docs** (`docs/`) | System design, the video subsystem, typed interfaces, the traceability matrix, risk register, open questions and pending ideas, repository layout |
 | **Source documents** (`docs/sources/`) | The Mission Brief, Paper 1 and Paper 2, as PDFs |
-| **Python package** (`nidar/`) | Typed contracts for every message, a component registry, logging, a mission log, and the **complete video transmission pipeline** |
-| **Simulators** (`sim/`) | Radio channel (fading and delayed feedback), end-to-end video link, test-video generators, an H.264 comparison baseline, and the paper's synthetic experiment |
-| **Tests** (`tests/`) | 424 fast tests plus 10 slow ones, including reproduction of the paper's published tables and a **traceability gate** that fails if any requirement lacks a module or a test |
-| **Tools** (`tools/`) | Quality gate runner, video demo, and the certified floor-design builder |
+| **Python package** (`nidar/`) | Typed contracts for every message, a component registry, logging, a mission log, the **complete video transmission pipeline**, and the **swarm / GCS mission logic** |
+| **Simulators** (`sim/`) | Radio channel (fading and delayed feedback), end-to-end video link, test-video generators, an H.264 comparison baseline, the paper's synthetic experiment, and a **multi-drone mission simulator** with 10 scenarios |
+| **Tests** (`tests/`) | 530 fast tests plus 10 slow ones, including reproduction of the paper's published tables and a **traceability gate** that fails if any requirement lacks a module or a test |
+| **Tools** (`tools/`) | Quality gate runner, video demo, mission runner, and the certified floor-design builder |
 
 ### ❌ Not in the repository yet
 
 | Area | Why not |
 |---|---|
-| Flight control, state estimation, mapping, survivor detection, swarm partitioning, survivor auction | Designed (docs + typed interfaces + stubs) but **not implemented**. They need the go-ahead for the next phase and answers to several open questions |
+| Flight control (NMPC, collision barriers), state estimation, terrain mapping, the survivor detector | Designed (docs + typed interfaces + stubs) but **not implemented**. They need hardware choices (sensors, compute) and the go-ahead for the onboard phase |
 | Most of the GCS user interface | No UI toolkit chosen yet (OQ-35). The **logic** behind the four operator buttons and the video service exist |
 | Real radio / SDR driver | No radio hardware chosen yet (OQ-03, OQ-10) |
 | Real floor channel code (LDPC or rateless) | Code family not chosen (OQ-23). Simulation uses an ideal stand-in |
@@ -122,12 +123,13 @@ Legend:
 | GCS video service (data side of the video panel) | ✅ | `nidar/gcs/services/video_service.py` | On-screen widget ⛔ OQ-35 |
 | Floor channel code | 🟡 | `nidar/video/floor/code.py` | Ideal-outage stand-in; real code ⛔ OQ-23 |
 | Radio driver | 🟡 | `nidar/link/radio.py` | In-memory loopback only; hardware ⛔ OQ-03/10 |
-| Onboard autonomy (estimation, mapping, perception, planning, control, payload) | 📐 | `nidar/onboard/` | Stubs citing Paper 2 equations |
-| Swarm logic (area partition, auction, confirmation) | 📐 | `nidar/swarm/` | Stubs; formulas conflict in Paper 2 ⛔ OQ-05 |
-| Failsafe mode automaton | 📐 | `nidar/onboard/automaton/` | Both Paper 2 mode tables loaded as candidates; none active ⛔ OQ-05a |
-| Mission simulator | 📐 | `sim/mission/` | Stub |
+| Onboard autonomy (estimation, mapping, perception, flight control) | 📐 | `nidar/onboard/` | Stubs citing Paper 2 equations; payload maths and coverage planning are implemented |
+| Swarm logic (area partition, auction, confirmation, coverage) | 🟡 | `nidar/swarm/`, `nidar/onboard/planning/` | Implemented and tested; Paper 2's conflicting formulas are all selectable settings |
+| Failsafe guards (low battery, link loss, abort, recall) | 🟡 | `nidar/onboard/automaton/guards.py` | Tested in the mission simulator; full mode table still ⛔ OQ-05a |
+| GCS mission logic (GeoJSON loader, preflight gates, global state, partition and auction services) | ✅ | `nidar/gcs/` | Screens ⛔ OQ-35 |
+| **Mission simulator** | 🟡 | `sim/mission/`, `sim/scenarios/` | Kinematic (points, no flight dynamics); 10 scenarios |
 
-Test IDs: **37 of 95** planned tests are implemented. The rest belong to the not-yet-started phases ([tests/test_index.json](tests/test_index.json)).
+Test IDs: **65 of 95** planned tests are implemented. The rest belong to the not-yet-started phases ([tests/test_index.json](tests/test_index.json)).
 
 ---
 
@@ -158,7 +160,7 @@ macOS / Linux:
 .venv/bin/python -m pip install -r requirements-dev.txt
 ```
 
-**Step 3 — run every quality gate** (lint + 424 tests + traceability, about 45 s)
+**Step 3 — run every quality gate** (lint + 530 tests + traceability, about 75 s)
 ```bash
 .venv\Scripts\python tools\check.py
 ```
@@ -195,7 +197,16 @@ Variants to try:
 .venv\Scripts\python tools\demo_video_link.py --size 288x352 --snr 2 6 10 --gops 4
 ```
 
-**Step 5 (optional) — the slow reproductions** (certified floor search and the paper's synthetic experiment, about 3 min more)
+**Step 5 — run simulated missions** (10 scenarios, about 13 s)
+```bash
+.venv\Scripts\python tools\run_mission.py
+```
+Each line is one complete mission: area searched, survivors tagged, kits delivered, landing, closest approach between drones. To see what happened, second by second:
+```bash
+.venv\Scripts\python tools\run_mission.py sim\scenarios\link_loss.json --timeline
+```
+
+**Step 6 (optional) — the slow reproductions** (certified floor search and the paper's synthetic experiment, about 3 min more)
 ```bash
 .venv\Scripts\python tools\check.py --full
 ```
@@ -215,6 +226,7 @@ Read the documents in this order. Each step says what you will learn and roughly
 | 5 | [docs/TRACEABILITY.md](docs/TRACEABILITY.md) | Every requirement (Brief, Paper 1, Paper 2) → source section → code module → test → evidence level | 20 min |
 | 6 | [docs/REPRODUCTION_P1.md](docs/REPRODUCTION_P1.md) | Which of Paper 1's published numbers our code reproduces, and which it does not | 15 min |
 | 7 | [docs/VIDEO_PIPELINE.md](docs/VIDEO_PIPELINE.md) | The built video link: design choices, end-to-end results, latency, **comparison with H.264** | 20 min |
+| 7b | [docs/MISSION_SIM.md](docs/MISSION_SIM.md) | The mission logic and simulator: what is built, scenario results, **findings on kits, separation and decoys** | 15 min |
 | 8 | [docs/OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md) | 35 decisions the sources leave open, or where they contradict each other | 30 min |
 | 9 | [docs/RISK_REGISTER.md](docs/RISK_REGISTER.md) · [docs/IDEAS_PENDING.md](docs/IDEAS_PENDING.md) | What could sink us; ideas not adopted yet | 15 min |
 | 10 | [docs/REPO_LAYOUT.md](docs/REPO_LAYOUT.md) | The code tree and phase-by-phase status | 10 min |
@@ -384,7 +396,9 @@ flowchart LR
    - This is central to the decision **H.265 (Paper 2) vs Paper 1 for the GCS video** (OQ-02).
 2. **Decoder-side motion search gives no gain** (paper target ≥ 1 dB). The cause is the paper's no-motion-search encoder; fixing it needs a design decision (IDEA-13).
 3. **Not real time in Python:** about 1.1 s to process a 0.32 s GoP. Flight needs a compiled implementation behind the same interfaces.
-4. **Paper 2 can deliver at most 4 kits** (4 drones × 1 kit), but there may be 10 survivors (OQ-01).
+4. **Kits decide the score, not the search** ([docs/MISSION_SIM.md](docs/MISSION_SIM.md)). With Paper 2's 1 kit per drone, 6 of 10 survivors get no kit; with 3 kits per drone all 10 are served in almost the same time (632 s vs 629 s, placeholder speeds).
+5. **Drones cross each other's paths.** Delivery flights pass through other drones' sweep areas at the same altitude (closest approach 0–0.6 m with no avoidance). Separation depends entirely on the collision barriers in the flight controller, which are not built yet (RISK-S13, IDEA-16).
+6. **A decoy can get a kit.** An object scored 0.7 by the detector on every frame passes Paper 2's confirmation rule, because consecutive frames are counted as independent evidence (RISK-S14).
 
 ---
 
@@ -407,16 +421,17 @@ nidar/                      runtime package
 │   ├── refinement/             allocator (Prop. 8/16), limiter (Lemma 6), spreader (block Hadamard)
 │   ├── certificates/           information density, sizing, DT bound, KL certificate, outage, certified grid
 │   └── control/                SNR predictor + margin rule, damped controller on the certified grid
-├── link/                   🟡 radio (loopback), framing / resource plan / priority mux (stubs)
-├── gcs/                    🟡 operator gate ✅, mission-file parser registry ✅, video service ✅, rest stubs
-├── onboard/                📐 estimation, mapping, perception, planning, control, automaton (mode tables), payload
-└── swarm/                  📐 area partition (DWVT), auction (cost forms, Hungarian), Bayesian confirmation
+├── link/                   🟡 radio (loopback), resource plan ✅, priority mux ✅, framing (stub)
+├── gcs/                    ✅ operator gate, GeoJSON mission loader, preflight gates, global state, partition / auction / video services
+├── onboard/                📐 estimation, mapping, perception, control (stubs) · ✅ coverage planning, payload maths, failsafe guards
+└── swarm/                  ✅ area partition (DWVT), auction (both cost forms, Hungarian), Bayesian confirmation
 sim/
 ├── channel/                ✅ block Rayleigh fading, AR(1) SNR with delayed reports, margin-rule outage
 ├── video/                  ✅ end-to-end link, test video, H.264 baseline, the paper's synthetic model
-└── mission/                📐 mission simulator (stub)
-tests/                      unit · contracts · static architecture rules · paper1 reproduction · video · traceability
-tools/                      check.py (all gates) · demo_video_link.py · build_certified_grid.py
+├── mission/                🟡 kinematic multi-drone mission simulator
+└── scenarios/              ✅ 10 mission scenarios (JSON) + test boundary (GeoJSON)
+tests/                      unit · contracts · static architecture rules · paper1 reproduction · video · mission · traceability
+tools/                      check.py (all gates) · demo_video_link.py · run_mission.py · build_certified_grid.py
 docs/                       architecture, design, interfaces, traceability, results, open questions, risks
 docs/sources/               Mission Brief, Paper 1, Paper 2 (PDF)
 ```
@@ -435,10 +450,12 @@ docs/sources/               Mission Brief, Paper 1, Paper 2 (PDF)
 
 | What | Command | Time |
 |---|---|---|
-| All fast gates (lint + tests + traceability) | `python tools/check.py` | ~45 s |
+| All fast gates (lint + tests + traceability) | `python tools/check.py` | ~75 s |
 | Everything, including slow reproductions | `python tools/check.py --full` | ~4 min |
 | Only the Paper 1 reproduction tests | `python -m pytest tests/paper1 -q` | ~25 s |
 | Only the video pipeline tests | `python -m pytest tests/video -q` | ~15 s |
+| Only the mission / swarm tests | `python -m pytest tests/mission -q` | ~20 s |
+| All simulated missions | `python tools/run_mission.py [scenario.json …] [--timeline]` | ~13 s |
 | Only the traceability gate | `python -m pytest tests/traceability -q` | ~1 s |
 | Video demo | `python tools/demo_video_link.py [--h264] [--fading 8] [--motion block] [--video testsrc2]` | ~6 s |
 | Build a certified floor-design grid | `python tools/build_certified_grid.py --out grid.json --b-f 533333 --L 16 --eps-core 1e-3 --gamma-db 9 10 11 --n-total 1333333 --margin-db 0` | ~1 min |
@@ -502,15 +519,15 @@ The full list (35 items, with sources and what each blocks) is in [docs/OPEN_QUE
 
 | # | Question | Blocks |
 |---|---|---|
-| OQ-01 | **Kits vs survivors:** Paper 2 gives 4 kits for up to 10 survivors. More kits per drone? More drones? Accept partial delivery? | Payload, weight, auction |
+| OQ-01 | **Kits per drone on the real airframe** (decided for simulation: it's a setting; 3 kits serve all 10). Can a drone carry more than one? | Payload, weight |
 | OQ-02 | **GCS video:** H.265 (Paper 2) or the Paper 1 hybrid? (See the H.264 finding in §8.3) | Radio choice, video work |
 | OQ-03 / OQ-10 | **Radio:** band, bandwidth, SDR or not, antennas, measured SNR and fading | All link sizing |
-| OQ-05 | **Paper 2 contradictions** (13 items: mode sets, timeouts, cost formulas, gates, priorities …) | Swarm, automaton |
+| OQ-05a | **Mode table** (Paper 2 gives two; other conflicts are now selectable settings) | Onboard automaton |
 | OQ-07 | **Weight budget** breakdown (Paper 2: 4 × 4.8 kg = 19.2 kg of the 25 kg) | Hardware |
 | OQ-12 / OQ-13 | **Video format** (resolution, fps, GoP) and **latency / outage targets** | Video sizing |
-| OQ-16 / OQ-17 | What **abort** and **recall** physically do; what happens **after** a geofence breach | Failsafes |
+| OQ-17 | What happens **after** a geofence breach (abort / recall are decided) | Failsafes |
 | OQ-18 | The 12 ft pad vs Paper 2's 3 m drone separation | Launch / landing |
-| OQ-21 / OQ-22 | Camera, altitude and speed; **mission file format** | Coverage, GCS |
+| OQ-21 | **Camera, altitude and speed** (the mission simulator uses placeholders) | Coverage time |
 | OQ-23 | Floor channel code: long block code or rateless | Real video link |
 | OQ-35 | GCS user-interface toolkit | Every GCS screen |
 
@@ -525,7 +542,8 @@ The full list (35 items, with sources and what each blocks) is in [docs/OPEN_QUE
 | 2 | Skeleton, typed contracts, registry, gates, traceability check | ✅ |
 | 3 | Paper 1 maths + channel simulator, checked against the paper's tables | ✅ |
 | 4 | Full Paper 1 video pipeline, end-to-end simulation, GCS video service | ✅ (simulation) |
-| next | **Mission simulator**, then swarm logic (partition, auction, confirmation) | Needs go-ahead + OQ-01, 05, 16, 21, 22 |
+| 5 | Swarm logic, GCS mission logic, kinematic mission simulator with 10 scenarios | ✅ (simulation) |
+| next | Onboard stack: estimator, terrain map, detector, NMPC + collision barriers (compiled); then dynamics in the simulator | Needs go-ahead + sensor/compute choices |
 | later | GCS screens (OQ-35), onboard stack (compiled), real radio integration, flight tests | Needs hardware decisions |
 
 ---

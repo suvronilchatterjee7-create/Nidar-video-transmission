@@ -19,7 +19,11 @@ Tag key: see [ARCHITECTURE.md §0](ARCHITECTURE.md#0-conventions).
 
 ## A. Questions raised in the team brief (§7)
 
-### OQ-01 · Kit count vs survivor count — OPEN
+### OQ-01 · Kit count vs survivor count — DECIDED FOR SIMULATION (2026-11-12)
+- **Decision:** kits per drone is a scenario setting. The baseline stays at Paper 2's 4 drones × 1 kit; survivors beyond the kits are still geotagged and reported as "no kit left". The auction serves as many survivors as possible instead of failing (docs/MISSION_SIM.md).
+- **Still open for hardware:** how many kits a real drone carries (weight, OQ-07; mechanism, OQ-20).
+
+*Original question:*
 - **Sources:** [BRIEF Scenario, §1] says up to 10 survivors, and "deliver a survivor kit to each identified survivor". [P2 §1.3, §8.4] assumes one 200 g kit per drone. [P2 §1.2 Eq. 7] sets N = 4.
 - **The problem:** Paper 2 can deliver at most 4 kits. Its assignment problem also requires Σᵢ aᵢⱼ = 1 for every survivor j [P2 Eq. 124 / Eq. 183]. When there are more unserviced survivors than drones still holding a kit, that problem is **infeasible**, not just short of kits. Paper 2 also returns a drone to search after it drops its only kit [P2 §7.3, Eq. 187], but that drone can no longer deliver.
 - **Blocks:**
@@ -55,7 +59,11 @@ Tag key: see [ARCHITECTURE.md §0](ARCHITECTURE.md#0-conventions).
 - **Evidence:** [P1 §D.5 H5, Table 23] reports −3.3 to −3.5 dB vs zero-latency H.264, and about −7 dB vs the default preset.
 - **Recorded as:** RISK-V02 in [RISK_REGISTER.md](RISK_REGISTER.md).
 
-### OQ-05 · Paper 2 internal inconsistencies — OPEN (one decision per sub-item)
+### OQ-05 · Paper 2 internal inconsistencies — DECIDED FOR SIMULATION (2026-11-12)
+- **Decision:** every variant is a named scenario setting; the baseline uses Paper 2's later, more detailed sections (cost Eq. 179, linear weight law Eq. 107, GCS timeout 5 s, χ² GNSS gate, corrected terrain margin). `sim/scenarios/p2_early_variants.json` runs the earlier ones (Eq. 38, multiplicative weights, 3 s).
+- **Still open:** which variant the flight software uses, and 05a (mode table), which no simulation chose.
+
+*Original table:*
 
 | ID | Topic | Variant A | Variant B (and C) | Blocks |
 |---|---|---|---|---|
@@ -143,7 +151,10 @@ Tag key: see [ARCHITECTURE.md §0](ARCHITECTURE.md#0-conventions).
 - **Problem:** a linear objective under only a sum constraint puts *all* capacity on the highest weight (state telemetry), so video and map get 0.
 - **Decision needed:** minimum and maximum rate per stream, or another formulation. Neither source gives one.
 
-### OQ-16 · Abort vs recall — OPEN
+### OQ-16 · Abort vs recall — DECIDED (2026-11-12)
+- **Decision:** EMERGENCY RECALL = every drone returns and lands on the pad. SAFETY ABORT = every drone stops and lands where it is (the Brief allows off-pad landing for safety emergencies [BRIEF §7]). Implemented in `nidar/onboard/automaton/guards.py` and the mission simulator; tested by MS-11 / MS-12.
+
+*Original question:*
 - **Sources:** [BRIEF §3, §4, §8] requires both a "safety abort" and an "emergency recall", and "abort the mission and recall all drones". [P2 §12.3.2, §14.3, §15.3.2] gives the GCS only [LOAD MISSION FILE, START MISSION, EMERGENCY SAFETY ABORT]. That is an omission, not a contradiction, so `gcs/` exposes all four Brief actions.
 - **Still open — what each button does physically:**
   - recall → RTH all? (likely, by wording)
@@ -179,7 +190,10 @@ Tag key: see [ARCHITECTURE.md §0](ARCHITECTURE.md#0-conventions).
 - **Source:** T ≥ 100 000 m² / (4·W_FOV·v_sweep) [P2 §12.2.3], with W_FOV = 2·z_rel·tan(FOV_h/2) [P2 Eq. 171].
 - **Facts needed from you:** FOV, resolution, search altitude z_search, v_sweep. Also the detector's ground sampling needs: the dataset gives altitude *bands* only.
 
-### OQ-22 · Mission file format — BLOCKED-ON-INPUT
+### OQ-22 · Mission file format — DECIDED FOR NOW (2026-11-12)
+- **Decision:** accept GeoJSON polygons (WGS-84 lon/lat, projected to local metres; optional launch-zone feature). `nidar/gcs/mission_loader/geojson.py`, registered by default. If the organisers hand out another format, it plugs in as a further parser.
+
+*Original question:*
 - **Source:** [BRIEF §3] says only "mission file/boundary file". Format, coordinate system, and whether the launch zone is included are all unknown.
 - **Architecture stance:** a parser registry in `gcs/mission_loader` behind a `MissionFileParser` protocol ([INTERFACES.md §2](INTERFACES.md#2-mission-file)), with no format assumed.
 
@@ -267,5 +281,5 @@ Tag key: see [ARCHITECTURE.md §0](ARCHITECTURE.md#0-conventions).
 |---|---|---|
 | Phase 2 (skeleton) | done; OQ-26 provisional | all others stubbed as named parameters |
 | Phase 3 (video reference + channel simulator) | none for reproducing paper tables | OQ-03, 11, 12, 13 needed to size for *our* link |
-| Mission simulator | OQ-01, 05a–c, 16, 17, 18, 21, 22 | 05d–m, 19, 20 |
+| Mission simulator | done (Phase 5, kinematic); 01, 05, 16, 22 decided | 17 (breach action), 18 (pad), 21 (camera) use placeholders |
 | Hardware / flight | OQ-03, 07, 10, 20, 29 | — |

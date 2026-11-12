@@ -1,8 +1,8 @@
 """Mission-file loading through a parser registry.
 
-The organiser file format is unknown (OQ-22), so no parser is registered yet and loading an unknown
-format fails with a message that names the file. [BRIEF §3] [ADIAT-inspired: config-driven registry,
-errors that name the file]
+The organiser file format is unknown (OQ-22). Team decision 2026-11-12: accept GeoJSON polygons for now, so
+the GeoJSON parser is registered by default; any other file fails with a message that names the file.
+[BRIEF §3] [ADIAT-inspired: config-driven registry, errors that name the file]
 """
 from __future__ import annotations
 
@@ -37,3 +37,12 @@ def load(raw: bytes, filename: str) -> ProcessResult[MissionDefinition]:
             f"[gcs.mission_loader] load failed (file={filename!r}): no registered parser accepts this file; "
             f"registered={registered_parsers()} (format is OQ-22)", t0)
     return candidates[0].parse(raw, filename)
+
+
+def _register_defaults() -> None:
+    from nidar.gcs.mission_loader.geojson import GeoJsonMissionParser
+    if "geojson" not in _PARSERS:
+        register_parser(GeoJsonMissionParser())
+
+
+_register_defaults()

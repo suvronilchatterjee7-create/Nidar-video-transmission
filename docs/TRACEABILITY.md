@@ -44,29 +44,29 @@ Status: **Phase 1 draft**.
 
 | ID | Requirement | Source | Module(s) | Test(s) | Evidence |
 |---|---|---|---|---|---|
-| R-B01 | ≥ 2 drones in one collaborative system | [BRIEF §1, §4] | `swarm/*`, `gcs/global_state` | MS-01 (N = 2 and N = 4 runs) | REQUIRED |
+| R-B01 | ≥ 2 drones in one collaborative system | [BRIEF §1, §4] | `swarm/*`, `gcs/global_state` | MS-01 (N = 2 and N = 4 runs) | REQUIRED; SIMULATED (kinematic mission sim, Phase 5): 2 and 4 drones complete |
 | R-B02 | Team-built airframes, no RTF | [BRIEF §2] | — (hardware) | HW-01 | REQUIRED |
 | R-B03 | Fleet AUW ≤ 25 kg | [BRIEF §2] | — (hardware; budget in ARCHITECTURE §9.1) | HW-02 weigh-in | OPEN (OQ-07) |
 | R-B04 | Payload 200 g, 20×10×5 cm box | [BRIEF §2] | `onboard/payload` | PT-05 mass reset uses 0.2 kg; HW-03 | REQUIRED |
-| R-B05 | Mission file loaded at setup; ≤ 300 s setup | [BRIEF §3] | `gcs/mission_loader`, `gcs/preflight` | GT-01 parse + validate; MS-02 setup timeline ≤ 300 s (sim) | OPEN (OQ-22) |
-| R-B06 | Autonomous scout → coordinate → detect → geotag → assign → drop → return within 30 min | [BRIEF §3] | `onboard/*`, `swarm/*`, `gcs/services` | MS-03 end-to-end scenario, with timing | REQUIRED; P2 ≤ 11 min is TARGET |
-| R-B07 | Operator inputs limited to load / start / abort / recall | [BRIEF §3, §4] | `gcs/controllers`, `common/contracts` `OperatorAction` | GT-02: UI exposes exactly 4 actions; GT-03: no other command path into `GcsCommand` | REQUIRED |
+| R-B05 | Mission file loaded at setup; ≤ 300 s setup | [BRIEF §3] | `gcs/mission_loader`, `gcs/preflight` | GT-01 parse + validate; MS-02 setup timeline ≤ 300 s (sim) | OPEN (setup timing); GeoJSON loader implemented (OQ-22 decided for now) |
+| R-B06 | Autonomous scout → coordinate → detect → geotag → assign → drop → return within 30 min | [BRIEF §3] | `onboard/*`, `swarm/*`, `gcs/services` | MS-03 end-to-end scenario, with timing | REQUIRED; SIMULATED (kinematic mission sim, Phase 5): baseline 629 s with placeholder speeds; P2 ≤ 11 min is TARGET |
+| R-B07 | Operator inputs limited to load / start / abort / recall | [BRIEF §3, §4] | `gcs/controllers`, `common/contracts` `OperatorAction` | GT-02: UI exposes exactly 4 actions; GT-03: no other command path into `GcsCommand` | REQUIRED; gate tested, manual inputs rejected in sim |
 | R-B08 | No swap after start | [BRIEF §3] | — (procedure) | HW-04 | REQUIRED |
-| R-B09 | Area division, task allocation, parallel scouting, delivery assignment, shared progress | [BRIEF §4] | `swarm/dwvt`, `swarm/auction`, `gcs/global_state` | MS-04 | REQUIRED |
+| R-B09 | Area division, task allocation, parallel scouting, delivery assignment, shared progress | [BRIEF §4] | `swarm/dwvt`, `swarm/auction`, `gcs/global_state` | MS-04 | REQUIRED; SIMULATED (kinematic mission sim, Phase 5) |
 | R-B10 | Single GCS; no separate control systems | [BRIEF §4] | `gcs/` (single instance) | GT-04: second GCS instance refused | REQUIRED |
-| R-B11a | Display: mission file / boundary loading | [BRIEF §4] | `gcs/views`, `GcsDisplayModel.mission_loaded` | GT-05 | REQUIRED |
-| R-B11b | Display: live location and status of all drones | [BRIEF §4] | `gcs/global_state` | GT-06 | REQUIRED |
-| R-B11c | Display: tagged survivor locations | [BRIEF §4] | `GcsDisplayModel.survivors` | GT-07 | OPEN (OQ-05l provisional tags) |
-| R-B11d | Display: kit delivery status per drone | [BRIEF §4] | `DeliveryEvent`, `gcs/views` | GT-08 | REQUIRED |
-| R-B11e | Display: progress and completion | [BRIEF §4] | `GcsDisplayModel.coverage_fraction`, `GcsDisplayModel.mission_phase` | GT-09 | REQUIRED |
+| R-B11a | Display: mission file / boundary loading | [BRIEF §4] | `gcs/views`, `GcsDisplayModel.mission_loaded` | GT-05 | REQUIRED; display model filled by the sim (widget OQ-35) |
+| R-B11b | Display: live location and status of all drones | [BRIEF §4] | `gcs/global_state` | GT-06 | REQUIRED; implemented |
+| R-B11c | Display: tagged survivor locations | [BRIEF §4] | `GcsDisplayModel.survivors` | GT-07 | SIMULATED (confirmed tags shown); provisional tags OPEN (OQ-05l) |
+| R-B11d | Display: kit delivery status per drone | [BRIEF §4] | `DeliveryEvent`, `gcs/views` | GT-08 | REQUIRED; filled by the sim |
+| R-B11e | Display: progress and completion | [BRIEF §4] | `GcsDisplayModel.coverage_fraction`, `GcsDisplayModel.mission_phase` | GT-09 | REQUIRED; filled by the sim |
 | R-B11f | Display: live video | [BRIEF §4] | `VideoSource`, `video/receiver`, `gcs/services/video_service` | GT-11; VT series | OPEN (OQ-02, OQ-09, OQ-35 widget); service implemented |
 | R-B12 | No external network; local RF only; no tethers | [BRIEF §5] | `link/radio` | CT-01: no socket to a non-local address in the runtime package (static check); HW-05 | REQUIRED |
 | R-B13 | ≤ 2 setup people; 1 operator | [BRIEF §6] | — (procedure) | HW-06 rehearsal | REQUIRED |
-| R-B14 | Launch and land inside the 12 ft pad; nothing outside | [BRIEF §7] | `onboard/planning` terminal constraint, `gcs/preflight` | MS-05 landing inside Z; PT-08 terminal constraint | OPEN (OQ-18) |
+| R-B14 | Launch and land inside the 12 ft pad; nothing outside | [BRIEF §7] | `onboard/planning` terminal constraint, `gcs/preflight` | MS-05 landing inside Z; PT-08 terminal constraint | SIMULATED (kinematic mission sim, Phase 5): all land in Z; pad separation OPEN (OQ-18) |
 | R-B15 | Operate only inside the boundary | [BRIEF §7] | `onboard/control/cbf` (geofence) | PT-06 CBF keeps the boundary in sim; MS-06 gust case | OPEN (OQ-05i, 05j, 17) |
-| R-B16 | Failsafes: RTH, low battery, C2 loss, geofence breach, abort, recall | [BRIEF §8] | `onboard/automaton`, `onboard/planning/safe_corridor` | MS-07…MS-12 (one per failsafe) | OPEN (OQ-05a, 05b, 16, 17) |
-| R-B17 | Operator can abort and recall all drones | [BRIEF §8] | `gcs/controllers`, `link/framing` (repeat until acked) | GT-12; MS-11, MS-12 | OPEN (OQ-16) |
-| R-B18 | Detect and geotag up to 10 survivors; kit to each identified one | [BRIEF Scenario, §1] | `onboard/perception`, `swarm/auction`, `onboard/payload` | MS-13 with 10 survivors | OPEN (OQ-01) |
+| R-B16 | Failsafes: RTH, low battery, C2 loss, geofence breach, abort, recall | [BRIEF §8] | `onboard/automaton`, `onboard/planning/safe_corridor` | MS-07…MS-12 (one per failsafe) | SIMULATED (kinematic mission sim, Phase 5): RTH, low battery, link loss, abort, recall; geofence-breach action OPEN (OQ-17) |
+| R-B17 | Operator can abort and recall all drones | [BRIEF §8] | `gcs/controllers`, `link/framing` (repeat until acked) | GT-12; MS-11, MS-12 | SIMULATED (kinematic mission sim, Phase 5) (OQ-16 decided: recall = pad, abort = land in place) |
+| R-B18 | Detect and geotag up to 10 survivors; kit to each identified one | [BRIEF Scenario, §1] | `onboard/perception`, `swarm/auction`, `onboard/payload` | MS-13 with 10 survivors | SIMULATED (kinematic mission sim, Phase 5): 10 tagged; kits per drone is a setting (OQ-01 decided) |
 
 ## 3. Paper 1 requirements (video)
 
@@ -97,25 +97,25 @@ Status: **Phase 1 draft**.
 | R-P2-02 | ES-EKF 15-dim error state; IMU 200 Hz; LiDAR / GNSS updates | [P2 §2.1, §4.1, Eq. 68–76] | `onboard/estimation/eskf` | PT-02 consistency (NEES) in sim | TARGET |
 | R-P2-03 | NDT scan matching; TSDF terrain | [P2 §4.2, Eq. 77–87] | `onboard/estimation/ndt`, `onboard/mapping/tsdf` | PT-03 on synthetic terrain | TARGET |
 | R-P2-04 | Ray-cast geotag with covariance; Low-Confidence re-observation | [P2 §4.3, Eq. 88–100] | `onboard/perception/geotag` | PT-04 known-pose geometry; covariance propagation vs Monte Carlo | PROVED (first order) / OPEN gate form (05k) |
-| R-P2-05 | Bayesian confirmation: prior 0.01, K = 10, multi-drone fusion, promote at P > 0.95 | [P2 §9.3, Eq. 258–265] | `swarm/confirmation` | PT-09 update arithmetic; MS-14 false-positive scenario | TARGET (calibration OQ-25) |
-| R-P2-06 | DWVT partition + Lloyd density | [P2 §5.1/§7.1, Eq. 157–168] | `swarm/dwvt` | PT-10 cells tile W; PT-11 smaller w → smaller cell | OPEN (weight law 05c′) |
+| R-P2-05 | Bayesian confirmation: prior 0.01, K = 10, multi-drone fusion, promote at P > 0.95 | [P2 §9.3, Eq. 258–265] | `swarm/confirmation` | PT-09 update arithmetic; MS-14 false-positive scenario | TARGET; MS-14 shows a 0.7-confidence decoy gets confirmed (OQ-25) |
+| R-P2-06 | DWVT partition + Lloyd density | [P2 §5.1/§7.1, Eq. 157–168] | `swarm/dwvt` | PT-10 cells tile W; PT-11 smaller w → smaller cell | PROVED (geometry); both weight laws selectable, linear is baseline |
 | R-P2-07 | BCD + Dubins coverage; spacing ≤ W_FOV(1 − overlap) | [P2 §5.2/§7.2, Eq. 169–175] | `onboard/planning/coverage_bcd`, `onboard/planning/dubins` | PT-12 full coverage of a test polygon; PT-13 R_min formula | PROVED (geometry) |
-| R-P2-08 | Boundary hysteresis and tanh speed damping | [P2 §5.4, Eq. 126–131] | `swarm/dwvt`, `onboard/planning` | PT-14 no chattering under injected noise | TARGET |
-| R-P2-09 | GCS min-cost assignment (Hungarian) | [P2 §5.3/§7.3, Eq. 176–187] | `swarm/auction/*`, `gcs/services/auction_service` | PT-15 vs brute force for N ≤ 4; PT-16 infeasible case reported (OQ-01) | PROVED (optimality) / OPEN cost form (05c) |
+| R-P2-08 | Boundary hysteresis and tanh speed damping | [P2 §5.4, Eq. 126–131] | `swarm/dwvt`, `onboard/planning` | PT-14 no chattering under injected noise | TARGET; hysteresis tested |
+| R-P2-09 | GCS min-cost assignment (Hungarian) | [P2 §5.3/§7.3, Eq. 176–187] | `swarm/auction/*`, `gcs/services/auction_service` | PT-15 vs brute force for N ≤ 4; PT-16 infeasible case reported (OQ-01) | PROVED (optimality, tested vs brute force); both cost forms selectable, Eq. 179 baseline |
 | R-P2-10 | Min-snap B-spline QP with kinematic and terrain limits | [P2 §8.1/§10.1, Eq. 188–198] | `onboard/planning/minsnap` | PT-17 waypoint interpolation and limits | PROVED (QP) / TARGET timing |
 | R-P2-11 | NMPC 50 Hz, N_h = 20, RK4, SQP-RTI | [P2 §8.2/§10.2, Eq. 199–208] | `onboard/control/nmpc` | PT-18 tracking in sim; HW-07 timing on target (8–12 ms claim) | TARGET |
 | R-P2-12 | CBFs: inter-agent (d_safe 3 m), terrain, geofence | [P2 §8.3/§11.1, Eq. 209–226] | `onboard/control/cbf` | PT-06, PT-19 two-drone head-on | PROVED (conditional on feasibility) |
 | R-P2-13 | Payload-drop feedforward; terminal ≤ 0.5 m, ≤ 0.3 m/s; IBVS within 3 m | [P2 §8.4, §9.5, §12.2.2, Eq. 227–238, 272] | `onboard/payload`, `onboard/control` | PT-05, PT-08; HW-08 drop accuracy | TARGET (0.3 m) / OPEN (OQ-20) |
 | R-P2-14 | Lexicographic infeasibility handling + disturbance observer | [P2 §8.5, §9.4, §14.2] | `onboard/control/lexicographic`, `onboard/control/disturbance_observer` | PT-20 infeasible-QP injection → safe state | OPEN (priority 05j) |
-| R-P2-15 | Hybrid automaton: low battery → RTH, comms loss → RTH | [P2 §9.1, §11.2, §14.1, Eq. 243–249] | `onboard/automaton` | MS-07, MS-08 | OPEN (05a, 05b) |
+| R-P2-15 | Hybrid automaton: low battery → RTH, comms loss → RTH | [P2 §9.1, §11.2, §14.1, Eq. 243–249] | `onboard/automaton` | MS-07, MS-08 | SIMULATED (kinematic mission sim, Phase 5); mode table and timeout are settings (OQ-05a/b) |
 | R-P2-16 | Degraded modes: LiDAR, GNSS, blind hover | [P2 §9.2, §13.2, Eq. 250–257] | `onboard/automaton`, `onboard/estimation/gates` | MS-15…MS-17 | OPEN (05d, 05e, 05g, OQ-19) |
 | R-P2-17 | Ghost buffer on stale neighbour state (> 200 ms) | [P2 §3.4, §6.4, §14.1] | `onboard/control/cbf` | PT-21 buffer grows with age | OPEN (05h) |
-| R-P2-18 | Priority multiplexing state (20 Hz) > map (1 Hz) > video | [P2 §12.1/§15.1.1] | `link/priority_mux`, `link/resource_plan` | CT-15 ordering preserved under overload | OPEN (rates OQ-15, OQ-14) |
+| R-P2-18 | Priority multiplexing state (20 Hz) > map (1 Hz) > video | [P2 §12.1/§15.1.1] | `link/priority_mux`, `link/resource_plan` | CT-15 ordering preserved under overload | OPEN (rates OQ-15, OQ-14); strict priority implemented |
 | R-P2-19 | GCS N×13 state matrix; timestamp interpolation; display-only predictor | [P2 §12.1, §14.3] | `gcs/global_state` | GT-14 predictor not fed back to control (static import check) | PROVED (by construction) |
 | R-P2-20 | Restricted operator UI | [P2 §12.3.2, §14.3, §15.3.2] | `gcs/controllers` | GT-02 | REQUIRED (plus recall, OQ-16) |
-| R-P2-21 | 5-minute preflight state machine | [P2 §12.4/§15.4] | `gcs/preflight` | MS-02 | TARGET (slot times) |
+| R-P2-21 | 5-minute preflight state machine | [P2 §12.4/§15.4] | `gcs/preflight` | MS-02 | TARGET (slot times); gate table implemented |
 | R-P2-22 | RTH terminal: inside Z, zero velocity | [P2 §12.3.1, §15.3.1] | `onboard/planning/minsnap` | PT-08 | PROVED (constraint) / OPEN (OQ-18) |
-| R-P2-23 | Coverage-time bound | [P2 §12.2.3, §15.2.3] | `sim/mission` report | MS-16 computes the bound once OQ-21 is answered | OPEN (OQ-05m, OQ-21) |
+| R-P2-23 | Coverage-time bound | [P2 §12.2.3, §15.2.3] | `sim/mission` report | MS-16 computes the bound once OQ-21 is answered | OPEN (camera values OQ-21); bound computed per run |
 | R-P2-24 | Mission ≤ 11 min design target | [P2 §12.2.3] | `sim/mission` | MS-03 timing | TARGET (OQ-05f) |
 
 ## 5. Methodology (ADIAT-inspired) rows

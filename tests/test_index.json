@@ -54,52 +54,52 @@
    "node": "tests/paper1/test_channel_and_controller.py::test_ct14_block_gain_statistics"
   },
   "CT-15": {
-   "status": "planned",
-   "phase": "Phase 3 (video reference)"
+   "status": "implemented",
+   "node": "tests/mission/test_swarm_units.py::test_ct15_priority_order_under_overload"
   },
   "GT-01": {
-   "status": "planned",
-   "phase": "GCS phase"
+   "status": "implemented",
+   "node": "tests/mission/test_swarm_units.py::test_gt01_geojson_lonlat_is_projected_to_metres"
   },
   "GT-02": {
    "status": "implemented",
    "node": "tests/unit/test_operator_actions.py::test_gt02_exactly_four_actions_gated_by_phase"
   },
   "GT-03": {
-   "status": "planned",
-   "phase": "GCS phase"
+   "status": "implemented",
+   "node": "tests/mission/test_missions.py::test_gt03_manual_inputs_are_rejected"
   },
   "GT-04": {
    "status": "planned",
    "phase": "GCS phase"
   },
   "GT-05": {
-   "status": "planned",
-   "phase": "GCS phase"
+   "status": "implemented",
+   "node": "tests/mission/test_missions.py::test_gt05_to_gt09_display_model_has_everything_the_brief_requires"
   },
   "GT-06": {
-   "status": "planned",
-   "phase": "GCS phase"
+   "status": "implemented",
+   "node": "tests/mission/test_missions.py::test_gt05_to_gt09_display_model_has_everything_the_brief_requires"
   },
   "GT-07": {
-   "status": "planned",
-   "phase": "GCS phase"
+   "status": "implemented",
+   "node": "tests/mission/test_missions.py::test_gt05_to_gt09_display_model_has_everything_the_brief_requires"
   },
   "GT-08": {
-   "status": "planned",
-   "phase": "GCS phase"
+   "status": "implemented",
+   "node": "tests/mission/test_missions.py::test_gt05_to_gt09_display_model_has_everything_the_brief_requires"
   },
   "GT-09": {
-   "status": "planned",
-   "phase": "GCS phase"
+   "status": "implemented",
+   "node": "tests/mission/test_missions.py::test_gt05_to_gt09_display_model_has_everything_the_brief_requires"
   },
   "GT-11": {
    "status": "implemented",
    "node": "tests/video/test_end_to_end.py::test_video_service_and_rgb"
   },
   "GT-12": {
-   "status": "planned",
-   "phase": "GCS phase"
+   "status": "implemented",
+   "node": "tests/mission/test_missions.py::test_ms12_recall_returns_everyone_to_the_pad"
   },
   "GT-13": {
    "status": "planned",
@@ -142,36 +142,36 @@
    "phase": "hardware / field"
   },
   "MS-01": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_missions.py::test_ms01_two_drone_minimum_fleet"
   },
   "MS-02": {
    "status": "planned",
    "phase": "mission / onboard phases"
   },
   "MS-03": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_missions.py::test_ms03_baseline_completes_within_30_minutes"
   },
   "MS-04": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_missions.py::test_ms04_work_is_shared"
   },
   "MS-05": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_missions.py::test_ms05_all_land_inside_the_pad"
   },
   "MS-06": {
    "status": "planned",
    "phase": "mission / onboard phases"
   },
   "MS-07": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_missions.py::test_ms07_low_battery_returns_before_empty"
   },
   "MS-08": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_missions.py::test_ms08_link_loss_triggers_onboard_return"
   },
   "MS-09": {
    "status": "planned",
@@ -182,20 +182,20 @@
    "phase": "mission / onboard phases"
   },
   "MS-11": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_missions.py::test_ms11_abort_lands_everyone_in_place"
   },
   "MS-12": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_missions.py::test_ms12_recall_returns_everyone_to_the_pad"
   },
   "MS-13": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_missions.py::test_ms13_ten_survivors_tagged_kits_delivered_rest_reported"
   },
   "MS-14": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_missions.py::test_ms14_decoy_is_confirmed_by_the_paper2_rule"
   },
   "MS-15": {
    "status": "planned",
@@ -226,8 +226,8 @@
    "phase": "mission / onboard phases"
   },
   "PT-05": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_swarm_units.py::test_pt05_payload_drop_feedforward"
   },
   "PT-06": {
    "status": "planned",
@@ -238,36 +238,36 @@
    "phase": "mission / onboard phases"
   },
   "PT-09": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_swarm_units.py::test_pt09_bayes_update_arithmetic"
   },
   "PT-10": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_swarm_units.py::test_pt10_cells_tile_the_area"
   },
   "PT-11": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_swarm_units.py::test_pt11_smaller_weight_gives_smaller_cell"
   },
   "PT-12": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_swarm_units.py::test_pt12_sweeps_cover_every_point_and_stay_inside"
   },
   "PT-13": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_swarm_units.py::test_pt13_turn_radius"
   },
   "PT-14": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_swarm_units.py::test_pt14_hysteresis_prevents_chattering"
   },
   "PT-15": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_swarm_units.py::test_pt15_hungarian_matches_brute_force"
   },
   "PT-16": {
-   "status": "planned",
-   "phase": "mission / onboard phases"
+   "status": "implemented",
+   "node": "tests/mission/test_swarm_units.py::test_pt16_more_survivors_than_kits_is_reported_not_failed"
   },
   "PT-17": {
    "status": "planned",

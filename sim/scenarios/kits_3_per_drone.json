@@ -1,0 +1,6 @@
+{
+  "_base": "baseline_p2.json",
+  "_about": "OQ-01 variant: 4 drones x 3 kits so all 10 survivors can be served. Paper 2's 4.8 kg mass assumes 1 kit; 2 extra kits add 0.4 kg per drone (OQ-07).",
+  "name": "kits_3_per_drone",
+  "kits_per_drone": 3
+}

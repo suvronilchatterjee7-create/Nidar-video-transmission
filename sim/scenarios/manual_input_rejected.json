@@ -1,0 +1,15 @@
+{
+  "_base": "baseline_p2.json",
+  "_about": "A manual payload-drop input during the mission must be rejected [BRIEF \u00a73].",
+  "name": "manual_input_rejected",
+  "operator_events": [
+    {
+      "t": 100.0,
+      "action": "drop_payload"
+    },
+    {
+      "t": 120.0,
+      "action": "load_mission_file"
+    }
+  ]
+}
