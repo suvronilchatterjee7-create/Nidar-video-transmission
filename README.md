@@ -1,4 +1,4 @@
-# Nidder — NIDAR RescueSwarm Video Transmission & System Architecture
+# Nidar — NIDAR RescueSwarm Video Transmission & System Architecture
 
 **Team RescueSwarm · NIDAR 2.0 · Track 1 (Drone Innovation)**
 
@@ -137,14 +137,14 @@ Test IDs: **65 of 95** planned tests are implemented. The rest belong to the not
 
 **You need:** Python **3.11** and git. ffmpeg is optional; it is only needed for the H.264 comparison.
 
-The repository is **private**. Ask the owner to add you under *Settings → Collaborators*.
+If the repository is private, ask the owner to add you under *Settings → Collaborators*.
 
 **Step 1 — clone**
 ```bash
-git clone https://github.com/suvronilchatterjee7-create/Nidder-video-transmission.git
+git clone https://github.com/suvronilchatterjee7-create/Nidar-video-transmission.git
 ```
 ```bash
-cd Nidder-video-transmission
+cd Nidar-video-transmission
 ```
 
 **Step 2 — create a virtual environment (Python 3.11) and install the pinned tools**
@@ -567,7 +567,7 @@ The full list (35 items, with sources and what each blocks) is in [docs/OPEN_QUE
 - **Paper 1:** M. Ranjan, *Probabilistic Spatiotemporal Layered Video Transmission in Joint Channel Under Strict Rate-Floor & Rate-Ceiling Limits*.
 - **Paper 2:** M. Ranjan, *Strategic Development and Progression Model for Autonomous Multi-Agent Search and Rescue Swarms*.
 
-These are shared for the team's internal use in this private repository.
+They are included here for the team's reference.
 
 **Third-party notes:**
 - **ADIAT** (Automated Drone Image Analysis Tool, GPL-3.0): only **design patterns** were used. No ADIAT source code is in this repository.
